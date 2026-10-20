@@ -1,0 +1,117 @@
+---
+import { steps } from '../data/site';
+---
+
+<section class="section" id="proceso">
+  <div class="container">
+    <div class="reveal">
+      <p class="eyebrow">Proceso</p>
+      <h2 class="section-title">Cuatro pasos,<br /><em>hechos a mano.</em></h2>
+    </div>
+
+    <ol class="steps">
+      {steps.map((s) => (
+        <li class="step reveal">
+          <span class="n">{s.n}</span>
+          <h3>{s.title}</h3>
+          <p>{s.text}</p>
+        </li>
+      ))}
+    </ol>
+
+    <aside class="materials reveal">
+      <div>
+        <h3>Fibra de vidrio</h3>
+        <p>Liviana y muy resistente. Ideal para exteriores y piezas de gran formato.</p>
+      </div>
+      <div>
+        <h3>Resina</h3>
+        <p>Máximo nivel de detalle. Perfecta para bustos, réplicas y piezas de colección.</p>
+      </div>
+      <div>
+        <h3>Látex</h3>
+        <p>Flexible. Para moldes, máscaras, prótesis y efectos especiales.</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .steps {
+    list-style: none;
+    margin: clamp(3rem, 6vw, 5rem) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  .step {
+    position: relative;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+  .step::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 0;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--oro);
+  }
+  .n {
+    font-family: var(--font-display);
+    font-size: 4rem;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--muted);
+  }
+  .step h3 {
+    font-size: 1.7rem;
+    margin: 1rem 0 0.7rem;
+  }
+  .step p {
+    color: var(--bone-dim);
+    font-size: 0.95rem;
+  }
+
+  .materials {
+    margin-top: clamp(4rem, 8vw, 6rem);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .materials div {
+    background: var(--ink);
+    padding: 2rem;
+  }
+  .materials h3 {
+    font-size: 1.6rem;
+    font-style: italic;
+    color: var(--resina);
+  }
+  .materials p {
+    color: var(--bone-dim);
+    font-size: 0.92rem;
+    margin-top: 0.5rem;
+  }
+
+  @media (max-width: 900px) {
+    .steps {
+      grid-template-columns: 1fr 1fr;
+    }
+    .materials {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

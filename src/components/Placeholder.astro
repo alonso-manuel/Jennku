@@ -1,0 +1,56 @@
+---
+// Marcador de foto mientras Jennku entrega imágenes reales.
+interface Props {
+  label?: string;
+  tone?: 'warm' | 'cool' | 'laca' | 'resina';
+  class?: string;
+}
+const { label = 'Foto del proyecto', tone = 'warm', class: className = '' } = Astro.props;
+---
+
+<div class:list={['ph', `ph-${tone}`, className]} role="img" aria-label={`Imagen de referencia: ${label}`}>
+  <img src="/brand/mascara.png" alt="" class="ph-mark" loading="lazy" />
+  <span class="ph-label">{label}</span>
+</div>
+
+<style>
+  .ph {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background-color: var(--ink-3);
+    isolation: isolate;
+  }
+  .ph::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+  .ph-warm { background-image: radial-gradient(120% 90% at 30% 20%, #3a322b 0%, #1a1715 70%); }
+  .ph-cool { background-image: radial-gradient(120% 90% at 70% 30%, #2c3033 0%, #151617 70%); }
+  .ph-laca { background-image: radial-gradient(120% 90% at 40% 25%, #4a3510 0%, #17130e 72%); }
+  .ph-resina { background-image: radial-gradient(120% 90% at 60% 20%, #4d3b1c 0%, #1a1611 72%); }
+
+  .ph-mark {
+    width: 28%;
+    max-width: 120px;
+    opacity: 0.08;
+    transition: transform 0.8s ease, opacity 0.6s ease;
+  }
+  .ph-label {
+    position: absolute;
+    left: 1rem;
+    bottom: 0.9rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+</style>

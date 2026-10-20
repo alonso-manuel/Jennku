@@ -1,0 +1,176 @@
+:root {
+  /* Paleta negro y oro (ver docs/BRIEFING.md) */
+  --ink: #0c0a09;
+  --ink-2: #161311;
+  --ink-3: #201c19;
+  --line: #2e2925;
+  --bone: #faf9f6;
+  --bone-dim: #b8b2aa;
+  --muted: #8f8880;
+  --oro: #ca8a04;
+  --oro-hover: #e09c12;
+  --resina: #e0b75a;
+
+  --font-display: 'Cormorant', 'Times New Roman', serif;
+  --font-body: 'Manrope', system-ui, sans-serif;
+
+  --gutter: clamp(1rem, 4vw, 3rem);
+  --max: 1240px;
+  --radius: 4px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--bone);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.05;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.section {
+  padding: clamp(5rem, 11vw, 9rem) 0;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--oro);
+}
+
+.eyebrow::before {
+  content: '';
+  width: 2rem;
+  height: 1px;
+  background: currentColor;
+}
+
+.section-title {
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  margin-top: 1rem;
+}
+
+.section-title em {
+  font-style: italic;
+  color: var(--bone-dim);
+}
+
+.lead {
+  color: var(--bone-dim);
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  max-width: 34rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.95rem 1.6rem;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: var(--oro);
+  color: var(--ink);
+}
+
+.btn-primary:hover {
+  background: var(--oro-hover);
+}
+
+.btn-ghost {
+  border-color: var(--line);
+  color: var(--bone);
+  background: transparent;
+}
+
+.btn-ghost:hover {
+  border-color: var(--bone-dim);
+}
+
+:focus-visible {
+  outline: 2px solid var(--resina);
+  outline-offset: 3px;
+}
+
+.js .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

@@ -1,0 +1,413 @@
+---
+import { waLink } from "../data/site";
+---
+
+<section class="hero" id="inicio" data-hero>
+  <!-- Brillo y palabra JENNKU: empiezan centrados detrás de la escultura y la siguen a su lugar -->
+  <div class="aura" aria-hidden="true" data-aura>
+    <div class="glow"></div>
+    <p class="ghost">Jennku</p>
+  </div>
+
+  <div class="container grid">
+    <div class="copy">
+      <p class="eyebrow">Taller de escultura · Lima, Perú</p>
+      <h1>
+        <span class="l l1">Damos forma</span>
+        <span class="l l2">a lo que</span>{" "}
+        <span class="l l3"><em>imaginas</em>.</span>
+      </h1>
+      <p class="lead">
+        Esculturas, dummies publicitarios, bustos y letras 3D en fibra de
+        vidrio, resina y látex. Hechas a mano por escultores formados en Bellas
+        Artes, a cualquier escala.
+      </p>
+      <div class="actions">
+        <a
+          class="btn btn-primary"
+          href={waLink()}
+          target="_blank"
+          rel="noopener"
+        >
+          Cotiza por WhatsApp
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg
+          >
+        </a>
+        <a class="btn btn-ghost" href="#proyectos">Ver proyectos</a>
+      </div>
+    </div>
+
+    <!-- Lugar final de la escultura principal: reserva el espacio, recibe el arrastre y guarda la imagen de respaldo -->
+    <div class="sculpture" aria-hidden="true" data-sculpture>
+      <div class="pedestal"></div>
+      <img
+        src="/modelos/figura.webp"
+        alt=""
+        width="406"
+        height="745"
+        fetchpriority="high"
+      />
+    </div>
+  </div>
+</section>
+
+<script>
+  // La escena 3D (Three.js) se carga aparte. Mientras tanto no se ve nada; el texto espera a que la
+  // escultura llegue a su lugar. Si no hay WebGL, falla la carga o tarda demasiado, se muestra la imagen
+  // de respaldo y el texto entra de inmediato.
+  const hero = document.querySelector<HTMLElement>("[data-hero]");
+  const stage = document.querySelector<HTMLElement>("[data-sculpture]");
+  const aura = document.querySelector<HTMLElement>("[data-aura]");
+
+  const hasWebGL = () => {
+    try {
+      const c = document.createElement("canvas");
+      return !!(c.getContext("webgl2") || c.getContext("webgl"));
+    } catch {
+      return false;
+    }
+  };
+
+  if (hero && stage && aura) {
+    const showText = () => hero.classList.add("text-in");
+
+    // Lleva el brillo y la palabra al centro del recuadro, más pequeños
+    const placeAura = () => {
+      const h = hero.getBoundingClientRect();
+      const s = stage.getBoundingClientRect();
+      aura.style.setProperty("--ax", `${s.left + s.width / 2 - (h.left + h.width / 2)}px`);
+      aura.style.setProperty("--ay", `${s.top + s.height / 2 - (h.top + h.height / 2)}px`);
+    };
+    const settle = () => {
+      placeAura();
+      hero.classList.add("settled");
+      window.addEventListener("resize", placeAura);
+    };
+
+    const fallback = () => {
+      if (stage.classList.contains("is-3d")) return;
+      stage.classList.add("no-3d");
+      hero.classList.add("no-3d");
+      showText();
+    };
+
+    if (hasWebGL()) {
+      setTimeout(fallback, 6000);
+      setTimeout(showText, 12000); // por si algo se demora: el texto nunca espera más de esto
+      import("../scripts/hero3d")
+        .then(({ mountHero }) =>
+          mountHero({
+            hero,
+            stage,
+            main: { src: "/modelos/figura.glb", height: 4.2, ground: 0.15 },
+            onPhase: (p) => {
+              if (p === "rise") hero.classList.add("rising");
+              if (p === "settle") settle();
+              if (p === "text") showText();
+            },
+          }),
+        )
+        .catch(fallback);
+    } else {
+      fallback();
+    }
+  }
+</script>
+
+<style>
+  .hero {
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    min-height: min(100svh, 960px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6.5rem 0 4rem;
+    overflow: hidden;
+  }
+
+  /* Capas: brillo y palabra (0) < canvas 3D (1) < texto y recuadro (2) */
+  .hero :global(.hero-canvas) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .aura {
+    --ax: 0px;
+    --ay: 0px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 0;
+    width: 0;
+    height: 0;
+    transform: translate(0, 0) scale(1);
+    pointer-events: none;
+  }
+  .glow {
+    position: absolute;
+    width: 75vmin;
+    height: 75vmin;
+    left: 0;
+    top: 0;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(202, 138, 4, 0.2) 0%,
+      rgba(202, 138, 4, 0) 62%
+    );
+  }
+  .ghost {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(5rem, 19vw, 20rem);
+    line-height: 1;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(202, 138, 4, 0.5);
+  }
+  /* Antes de que suba la escultura no se ve nada; al subir aparecen el brillo y la palabra */
+  :global(.js) .aura {
+    opacity: 0;
+    transition: opacity 1.4s ease;
+  }
+  .hero.rising .aura,
+  .hero.no-3d .aura {
+    opacity: 1;
+  }
+  /* Al asentarse, la palabra y el brillo acompañan a la escultura a su recuadro */
+  .hero.settled .aura {
+    transform: translate(var(--ax), var(--ay)) scale(0.4);
+    transition:
+      opacity 1.4s ease,
+      transform 1.3s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .hero.no-3d .aura {
+    display: none;
+  }
+
+  .grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: 3rem;
+    flex: 1;
+  }
+  h1 {
+    font-size: clamp(3.2rem, 9vw, 7.5rem);
+    margin: 1.4rem 0 1.6rem;
+    font-weight: 500;
+  }
+  h1 em {
+    font-style: italic;
+    color: var(--oro);
+  }
+  .l {
+    display: inline-block;
+  }
+  .l1 {
+    display: block;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 2.2rem;
+  }
+
+  .sculpture {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding-bottom: 2rem;
+    width: min(100%, 460px);
+    aspect-ratio: 4 / 5;
+    justify-self: center;
+  }
+  .sculpture.is-3d {
+    cursor: grab;
+    touch-action: pan-y;
+  }
+  .sculpture.is-3d:active {
+    cursor: grabbing;
+  }
+  .sculpture img {
+    position: relative;
+    width: min(62%, 300px);
+    height: auto;
+    filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.6));
+    animation: float 9s ease-in-out infinite;
+  }
+  :global(.js) .sculpture img {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+  .sculpture.no-3d img {
+    opacity: 1;
+  }
+  .sculpture.is-3d img {
+    display: none;
+  }
+  .pedestal {
+    position: absolute;
+    bottom: 0;
+    width: 70%;
+    height: 40px;
+    border-radius: 50%;
+    background: radial-gradient(
+      ellipse,
+      rgba(0, 0, 0, 0.7) 0%,
+      transparent 70%
+    );
+  }
+  /* Con 3D la sombra se dibuja en la escena, bajo la base real del modelo */
+  :global(.js) .pedestal {
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+  .sculpture.no-3d .pedestal {
+    opacity: 1;
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-1deg);
+    }
+    50% {
+      transform: translateY(-14px) rotate(1deg);
+    }
+  }
+
+  /* Entrada del texto: cada línea del titular llega desde una dirección distinta.
+     Las animaciones esperan en pausa hasta que la escultura llega a su lugar (.text-in). */
+  :global(.js) .eyebrow {
+    animation: from-left 1s var(--ease-out) 0.1s both;
+  }
+  :global(.js) .eyebrow::before {
+    transform-origin: left;
+    animation: draw 0.9s var(--ease-out) 0.3s both;
+  }
+  :global(.js) .l1 {
+    animation: from-left 1.2s var(--ease-out) 0.25s both;
+  }
+  :global(.js) .l2 {
+    animation: from-right 1.2s var(--ease-out) 0.45s both;
+  }
+  :global(.js) .l3 {
+    animation: from-below 1.4s var(--ease-out) 0.8s both;
+  }
+  :global(.js) .lead {
+    animation: rise 1s var(--ease-out) 1.1s both;
+  }
+  :global(.js) .actions {
+    animation: rise 1s var(--ease-out) 1.25s both;
+  }
+  :global(.js) .hero:not(.text-in) .copy *,
+  :global(.js) .hero:not(.text-in) .copy *::before {
+    animation-play-state: paused;
+  }
+  @keyframes from-left {
+    from {
+      opacity: 0;
+      transform: translateX(-12vw);
+      filter: blur(6px);
+    }
+  }
+  @keyframes from-right {
+    from {
+      opacity: 0;
+      transform: translateX(12vw);
+      filter: blur(6px);
+    }
+  }
+  @keyframes from-below {
+    from {
+      opacity: 0;
+      transform: translateY(0.5em) scale(0.96);
+      filter: blur(12px);
+    }
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+  @keyframes draw {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .sculpture {
+      order: -1;
+      width: 200px;
+      padding-bottom: 1rem;
+    }
+    .sculpture img {
+      width: 120px;
+    }
+  }
+
+  /* Movimiento reducido: la coreografía se mantiene (excepción del Hero, ver CLAUDE.md); el texto entra con recorridos cortos */
+  @media (prefers-reduced-motion: reduce) {
+    .sculpture img {
+      animation: none;
+    }
+    :global(.js) .eyebrow,
+    :global(.js) .l1 {
+      animation-name: soft-left;
+    }
+    :global(.js) .l2 {
+      animation-name: soft-right;
+    }
+    :global(.js) .l3,
+    :global(.js) .lead,
+    :global(.js) .actions {
+      animation-name: soft-up;
+    }
+  }
+  @keyframes soft-left {
+    from {
+      opacity: 0;
+      transform: translateX(-32px);
+    }
+  }
+  @keyframes soft-right {
+    from {
+      opacity: 0;
+      transform: translateX(32px);
+    }
+  }
+  @keyframes soft-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+</style>

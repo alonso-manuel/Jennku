@@ -1,0 +1,108 @@
+---
+import { services } from '../data/site';
+---
+
+<section class="section" id="servicios">
+  <div class="container">
+    <div class="head reveal">
+      <div>
+        <p class="eyebrow">Servicios</p>
+        <h2 class="section-title">Del boceto<br /><em>a la pieza terminada.</em></h2>
+      </div>
+      <p class="lead">
+        Hacemos piezas únicas o en serie, para interior o exterior, para marcas, instituciones,
+        artistas y particulares. Si se puede imaginar, se puede esculpir.
+      </p>
+    </div>
+
+    <ol class="list">
+      {services.map((s, i) => (
+        <li class="item reveal">
+          <span class="num">{String(i + 1).padStart(2, '0')}</span>
+          <h3>{s.title}</h3>
+          <p>{s.text}</p>
+          <ul class="tags">
+            {s.tags.map((t) => <li>{t}</li>)}
+          </ul>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem 4rem;
+    align-items: end;
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+  }
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+  .item {
+    padding: 2.2rem 2rem 2.4rem;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    transition: background 0.3s;
+  }
+  .item:hover {
+    background: var(--ink-2);
+  }
+  .item:hover .num {
+    color: var(--oro);
+  }
+  .num {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--muted);
+    transition: color 0.3s;
+  }
+  h3 {
+    font-size: 1.9rem;
+    margin: 2.5rem 0 0.8rem;
+  }
+  .item > p {
+    color: var(--bone-dim);
+    font-size: 0.95rem;
+  }
+  .tags {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .tags li {
+    font-size: 0.72rem;
+    padding: 0.25rem 0.65rem;
+    border: 1px solid var(--line);
+    border-radius: 99px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 900px) {
+    .head {
+      grid-template-columns: 1fr;
+    }
+    .list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 600px) {
+    .list {
+      grid-template-columns: 1fr;
+    }
+    h3 {
+      margin-top: 1.5rem;
+    }
+  }
+</style>

@@ -1,0 +1,191 @@
+---
+import { site, waLink } from '../data/site';
+
+const types = ['Dummy o pieza publicitaria', 'Escultura o estatua', 'Busto o monumento', 'Letras o logo 3D', 'Parque temático o piscina', 'Molde o réplica', 'Otro'];
+---
+
+<section class="section contact" id="contacto">
+  <div class="container grid">
+    <div class="reveal">
+      <p class="eyebrow">Cotiza tu proyecto</p>
+      <h2 class="section-title">Cuéntanos tu idea.<br /><em>Nosotros le damos forma.</em></h2>
+      <p class="lead">
+        Envíanos una referencia, un boceto o solo una descripción. Te respondemos con una propuesta
+        y un presupuesto sin compromiso.
+      </p>
+
+      <ul class="info">
+        <li><span>WhatsApp</span><a href={waLink()} target="_blank" rel="noopener">{site.phoneDisplay}</a></li>
+        <li><span>Correo</span><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        <li><span>Taller</span>{site.address}</li>
+        <li><span>Horario</span>{site.hours}</li>
+      </ul>
+    </div>
+
+    <form class="form reveal" data-wa-form>
+      <div class="row">
+        <label>
+          Nombre
+          <input name="nombre" required autocomplete="name" placeholder="Tu nombre" />
+        </label>
+        <label>
+          Empresa <small>(opcional)</small>
+          <input name="empresa" autocomplete="organization" placeholder="Marca o institución" />
+        </label>
+      </div>
+      <label>
+        ¿Qué necesitas?
+        <select name="tipo" required>
+          <option value="" disabled selected>Elige un tipo de proyecto</option>
+          {types.map((t) => <option>{t}</option>)}
+        </select>
+      </label>
+      <div class="row">
+        <label>
+          Tamaño aproximado
+          <input name="tamano" placeholder="Ej. 2 metros" />
+        </label>
+        <label>
+          Fecha de entrega
+          <input name="fecha" placeholder="Ej. fines de noviembre" />
+        </label>
+      </div>
+      <label>
+        Detalles
+        <textarea name="detalle" rows="4" required placeholder="Describe la pieza, dónde irá, cantidad, colores..."></textarea>
+      </label>
+      <button class="btn btn-primary" type="submit">
+        Enviar por WhatsApp
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+      </button>
+      <p class="note">Se abrirá WhatsApp con tu mensaje listo. Podrás adjuntar fotos de referencia en el chat.</p>
+    </form>
+  </div>
+</section>
+
+<script define:vars={{ phone: site.whatsapp }}>
+  document.querySelector('[data-wa-form]').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const d = new FormData(e.currentTarget);
+    const lines = [
+      'Hola Jennku, quiero cotizar un proyecto.',
+      `Nombre: ${d.get('nombre')}`,
+      d.get('empresa') && `Empresa: ${d.get('empresa')}`,
+      `Tipo: ${d.get('tipo')}`,
+      d.get('tamano') && `Tamaño: ${d.get('tamano')}`,
+      d.get('fecha') && `Fecha: ${d.get('fecha')}`,
+      `Detalles: ${d.get('detalle')}`,
+    ].filter(Boolean);
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener');
+  });
+</script>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2.5rem, 6vw, 6rem);
+  }
+  .lead {
+    margin-top: 1.5rem;
+  }
+  .info {
+    list-style: none;
+    padding: 0;
+    margin: 2.5rem 0 0;
+  }
+  .info li {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--line);
+    font-size: 0.95rem;
+  }
+  .info span {
+    color: var(--muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding-top: 0.15rem;
+  }
+  .info a {
+    text-decoration: none;
+  }
+  .info a:hover {
+    color: var(--oro);
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    background: var(--ink-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    align-self: start;
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem;
+  }
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--bone-dim);
+  }
+  small {
+    font-weight: 400;
+    color: var(--muted);
+  }
+  input,
+  select,
+  textarea {
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 400;
+    color: var(--bone);
+    background: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.8rem 0.9rem;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: #5e5a53;
+  }
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--oro);
+  }
+  textarea {
+    resize: vertical;
+  }
+  .form .btn {
+    margin-top: 0.4rem;
+  }
+  .note {
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 520px) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

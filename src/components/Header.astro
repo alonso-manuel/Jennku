@@ -1,0 +1,180 @@
+---
+import { waLink } from '../data/site';
+
+const links = [
+  { href: '#servicios', label: 'Servicios' },
+  { href: '#proyectos', label: 'Proyectos' },
+  { href: '#proceso', label: 'Proceso' },
+  { href: '#taller', label: 'El taller' },
+  { href: '#contacto', label: 'Contacto' },
+];
+---
+
+<header class="header" data-header>
+  <div class="container bar">
+    <a href="#inicio" class="brand" aria-label="Jennku, ir al inicio">
+      <img src="/brand/mascara.png" alt="" width="22" height="30" />
+      <img src="/brand/jennku-wordmark.png" alt="Jennku" width="96" height="30" class="wordmark" />
+    </a>
+
+    <nav class="nav" id="menu" aria-label="Principal">
+      <ul>
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+      <a class="btn btn-primary nav-cta" href={waLink()} target="_blank" rel="noopener">Cotizar</a>
+    </nav>
+
+    <a class="btn btn-ghost bar-cta" href={waLink()} target="_blank" rel="noopener">Cotizar</a>
+
+    <button class="toggle" aria-expanded="false" aria-controls="menu" aria-label="Abrir menú" data-toggle>
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector('[data-header]')!;
+  const toggle = document.querySelector<HTMLButtonElement>('[data-toggle]')!;
+
+  const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 40);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const setOpen = (open: boolean) => {
+    header.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  toggle.addEventListener('click', () => setOpen(!header.classList.contains('is-open')));
+  header.querySelectorAll('.nav a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+</script>
+
+<style>
+  .header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    transition: background 0.3s, border-color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .header.is-scrolled,
+  .header.is-open {
+    background: rgba(15, 14, 13, 0.88);
+    backdrop-filter: blur(12px);
+    border-color: var(--line);
+  }
+  /* Logo a la izquierda, menú centrado y "Cotizar" con borde a la derecha */
+  .bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    height: 4.5rem;
+  }
+  .bar-cta {
+    justify-self: end;
+    padding: 0.65rem 1.4rem;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    text-decoration: none;
+  }
+  .brand img {
+    height: 30px;
+    width: auto;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 2.25rem;
+  }
+  .nav ul {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav ul a {
+    text-decoration: none;
+    font-size: 0.9rem;
+    color: var(--bone-dim);
+    transition: color 0.2s;
+  }
+  .nav ul a:hover {
+    color: var(--bone);
+  }
+  /* El botón dentro del menú solo se ve en el menú desplegable del celular */
+  .nav-cta {
+    display: none;
+  }
+  .toggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    position: relative;
+  }
+  .toggle span {
+    position: absolute;
+    left: 11px;
+    right: 11px;
+    height: 1.5px;
+    background: var(--bone);
+    transition: transform 0.3s;
+  }
+  .toggle span:first-child { top: 18px; }
+  .toggle span:last-child { top: 25px; }
+  .is-open .toggle span:first-child { transform: translateY(3.5px) rotate(45deg); }
+  .is-open .toggle span:last-child { transform: translateY(-3.5px) rotate(-45deg); }
+
+  @media (max-width: 900px) {
+    .bar {
+      display: flex;
+      justify-content: space-between;
+    }
+    .bar-cta {
+      display: none;
+    }
+    .nav-cta {
+      display: inline-flex;
+    }
+    .toggle {
+      display: block;
+    }
+    .nav {
+      position: fixed;
+      inset: 4.5rem 0 0;
+      height: calc(100dvh - 4.5rem);
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 2rem;
+      padding: 2rem var(--gutter);
+      background: var(--ink);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .is-open .nav {
+      opacity: 1;
+      visibility: visible;
+    }
+    .nav ul {
+      flex-direction: column;
+      gap: 0;
+    }
+    .nav ul a {
+      display: block;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--bone);
+    }
+  }
+</style>

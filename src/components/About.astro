@@ -1,0 +1,133 @@
+---
+import { testimonials } from '../data/site';
+import Placeholder from './Placeholder.astro';
+---
+
+<section class="section about" id="taller">
+  <div class="container">
+    <div class="grid">
+      <div class="photos reveal">
+        <Placeholder label="El taller" tone="warm" class="p1" />
+        <Placeholder label="Equipo trabajando" tone="laca" class="p2" />
+      </div>
+
+      <div class="copy reveal">
+        <p class="eyebrow">El taller</p>
+        <h2 class="section-title">Oficio de escultor,<br /><em>mirada de artista.</em></h2>
+        <p class="lead">
+          Jennku es un taller formado por escultores de Bellas Artes del Perú. Llevamos la técnica
+          académica del modelado, el vaciado y la pátina a proyectos reales para marcas,
+          instituciones y personas que quieren algo hecho de verdad.
+        </p>
+        <ul class="points">
+          <li><strong>Formación académica.</strong> Anatomía, proporción y composición en cada pieza.</li>
+          <li><strong>Cualquier escala.</strong> De una figura de 20 cm a un monumento de varios metros.</li>
+          <li><strong>Asesoría en materiales.</strong> Te recomendamos lo que mejor resiste según dónde irá la pieza.</li>
+          <li><strong>Envíos a todo el Perú.</strong> Embalaje seguro e instalación en obra si la necesitas.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quotes">
+      {testimonials.map((t) => (
+        <blockquote class="quote reveal">
+          <p>“{t.quote}”</p>
+          <footer>
+            <strong>{t.name}</strong>
+            <span>{t.role}</span>
+          </footer>
+        </blockquote>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    background: var(--ink-2);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .photos {
+    position: relative;
+    aspect-ratio: 4 / 5;
+  }
+  .photos :global(.p1) {
+    position: absolute;
+    inset: 0 18% 18% 0;
+    width: auto;
+    height: auto;
+    border-radius: var(--radius);
+  }
+  .photos :global(.p2) {
+    position: absolute;
+    inset: 45% 0 0 40%;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    border-radius: var(--radius);
+    border: 6px solid var(--ink-2);
+  }
+  .lead {
+    margin-top: 1.5rem;
+  }
+  .points {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+  }
+  .points li {
+    padding: 1rem 0;
+    border-top: 1px solid var(--line);
+    color: var(--bone-dim);
+    font-size: 0.95rem;
+  }
+  .points strong {
+    color: var(--bone);
+    font-weight: 600;
+  }
+
+  .quotes {
+    margin-top: clamp(4rem, 9vw, 7rem);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .quote {
+    margin: 0;
+    padding: 2rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .quote p {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    line-height: 1.35;
+  }
+  .quote footer {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.85rem;
+  }
+  .quote footer span {
+    color: var(--muted);
+  }
+
+  @media (max-width: 900px) {
+    .grid,
+    .quotes {
+      grid-template-columns: 1fr;
+    }
+    .photos {
+      max-width: 520px;
+    }
+  }
+</style>
