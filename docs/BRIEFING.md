@@ -39,8 +39,8 @@ No se copia. Sirve como referencia de **qué ofrece el rubro**. La idea es hacer
 
 ## Estructura de la landing
 1. Hero: titular con entrada animada, CTA a WhatsApp, escultura 3D (las cifras y la marquesina de materiales se quitaron por decisión del equipo)
-2. Servicios (6)
-3. Proyectos: galería con filtros por categoría
+2. Sala (`#obras`): muro de galería con las 6 obras del taller (fotos de estudio y cartela). Cada una se abre en grande con su ficha y se puede girar en 3D. Más adelante, con más obras, una página `/galeria`
+3. Servicios (6)
 4. Proceso (4 pasos) y materiales
 5. El taller (Bellas Artes) y testimonios
 6. Contacto: formulario → WhatsApp
@@ -50,11 +50,11 @@ No se copia. Sirve como referencia de **qué ofrece el rubro**. La idea es hacer
 Todo está centralizado en `src/data/site.ts` y marcado con `// FICTICIO`:
 - WhatsApp, teléfono, correo, dirección, horario, redes sociales
 - URL final del sitio (`site.url`, también en `astro.config.mjs`)
-- Proyectos de la galería (`projects`): sin foto usan el componente `Placeholder`
+- Títulos, materiales, medidas, años y textos de las obras de la Sala (`obras`)
 - Testimonios (`testimonials`)
 
 ## Pendientes
-- [ ] Fotos reales de trabajos → `public/proyectos/` y la propiedad `image` en cada proyecto
+- [ ] Confirmar con el cliente títulos y datos de las 6 obras de la Sala
 - [ ] Fotos del taller y del equipo (sección "El taller", hoy con placeholders)
 - [ ] Datos de contacto reales y redes
 - [ ] Testimonios reales (o quitarlos si no hay)

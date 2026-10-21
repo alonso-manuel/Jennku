@@ -1,0 +1,591 @@
+---
+import { obras } from "../data/site";
+---
+
+<!-- La Sala: muro claro de galería con las obras del taller. Cada obra se abre en grande con su ficha
+     y, si tiene modelo, se puede girar en 3D. -->
+<section class="sala" id="obras" aria-labelledby="sala-title">
+  <div class="container">
+    <div class="head reveal">
+      <h2 id="sala-title">Sala de esculturas</h2>
+      <p>{obras.length} piezas · ábrelas y gíralas en 3D</p>
+    </div>
+
+    <ul class="wall">
+      {
+        obras.map((o, i) => (
+          <li class="work reveal">
+            <button
+              class="frame"
+              type="button"
+              data-open={i}
+              aria-label={`Ver «${o.title}» en grande`}
+            >
+              <img
+                src={`/obras/${o.slug}-sm.webp`}
+                srcset={`/obras/${o.slug}-sm.webp 480w, /obras/${o.slug}.webp 896w`}
+                sizes="(max-width: 600px) 90vw, (max-width: 900px) 45vw, 30vw"
+                alt={`${o.title}, ${o.material.toLowerCase()}`}
+                width="480"
+                height="640"
+                loading="lazy"
+              />
+              {o.model && (
+                <span class="badge">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="14"
+                    height="14"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    aria-hidden="true"
+                  >
+                    <path d="M21 12a9 4 0 1 1-4-3.3M17 5.5 17.5 8.7 14.3 9.2" />
+                  </svg>
+                  Girar en 3D
+                </span>
+              )}
+            </button>
+            <p class="cartela">
+              <b>{o.title}</b>
+              {o.material} · {o.height}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<dialog class="viewer" data-viewer aria-labelledby="v-title">
+  <div class="v-stage">
+    <img class="v-photo" data-v-photo alt="" width="896" height="1195" />
+    <div class="v-3d" data-v-3d></div>
+    <p class="v-status" data-v-status role="status"></p>
+    <p class="v-hint" data-v-hint>
+      Arrastra para girar · pellizca o usa la rueda para acercar
+    </p>
+  </div>
+
+  <div class="v-info">
+    <div class="v-top">
+      <span class="v-count" data-v-count></span>
+      <button class="v-close" type="button" data-v-close aria-label="Cerrar">
+        <svg
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg
+        >
+      </button>
+    </div>
+
+    <h3 id="v-title" data-v-title></h3>
+    <dl class="v-spec">
+      <dt>Material</dt><dd data-v-material></dd>
+      <dt>Altura</dt><dd data-v-height></dd>
+      <dt>Año</dt><dd data-v-year></dd>
+    </dl>
+    <p class="v-text" data-v-text></p>
+    <p class="v-note">Datos provisionales</p>
+
+    <div class="v-mode" role="group" aria-label="Cómo ver la obra" data-v-mode>
+      <button type="button" data-mode="3d" aria-pressed="true">3D</button>
+      <button type="button" data-mode="foto" aria-pressed="false">Foto</button>
+    </div>
+
+    <a class="btn btn-primary v-cta" data-v-cta target="_blank" rel="noopener"
+      >Cotiza una pieza así</a
+    >
+
+    <div class="v-nav">
+      <button type="button" data-v-prev aria-label="Obra anterior">
+        <svg
+          viewBox="0 0 24 24"
+          width="18"
+          height="18"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg
+        >
+        Anterior
+      </button>
+      <button type="button" data-v-next aria-label="Obra siguiente">
+        Siguiente
+        <svg
+          viewBox="0 0 24 24"
+          width="18"
+          height="18"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg
+        >
+      </button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  import { obras, waLink } from "../data/site";
+
+  const dialog = document.querySelector<HTMLDialogElement>("[data-viewer]")!;
+  const $ = <T extends HTMLElement>(sel: string) =>
+    dialog.querySelector<T>(sel)!;
+  const photo = $<HTMLImageElement>("[data-v-photo]");
+  const stage3d = $("[data-v-3d]");
+  const status = $("[data-v-status]");
+  const modeBtns = Array.from(
+    dialog.querySelectorAll<HTMLButtonElement>("[data-mode]"),
+  );
+  const modeGroup = $("[data-v-mode]");
+
+  let index = 0;
+  let mode: "3d" | "foto" = "3d";
+  let token = 0; // evita que un modelo que tarda aparezca después de cambiar de obra
+
+  const setMode = (m: "3d" | "foto") => {
+    mode = m;
+    dialog.dataset.mode = m;
+    modeBtns.forEach((b) =>
+      b.setAttribute("aria-pressed", String(b.dataset.mode === m)),
+    );
+  };
+
+  const show = async (i: number) => {
+    index = (i + obras.length) % obras.length;
+    const o = obras[index];
+    $("[data-v-count]").textContent = `${index + 1} / ${obras.length}`;
+    $("[data-v-title]").textContent = o.title;
+    $("[data-v-material]").textContent = o.material;
+    $("[data-v-height]").textContent = o.height;
+    $("[data-v-year]").textContent = o.year;
+    $("[data-v-text]").textContent = o.text;
+    $<HTMLAnchorElement>("[data-v-cta]").href = waLink(
+      `Hola Jennku, vi la obra «${o.title}» en su web y quiero cotizar una pieza parecida.`,
+    );
+    photo.src = `/obras/${o.slug}.webp`;
+    photo.alt = `${o.title}, ${o.material.toLowerCase()}`;
+
+    modeGroup.hidden = !o.model;
+    dialog.classList.remove("is-3d-ready");
+    if (!o.model) {
+      setMode("foto");
+      return;
+    }
+    setMode(mode);
+    const mine = ++token;
+    status.textContent = "Cargando modelo 3D…";
+    try {
+      const { showModel } = await import("../scripts/viewer3d");
+      await showModel(stage3d, o.model);
+      if (mine !== token) return;
+      dialog.classList.add("is-3d-ready");
+      status.textContent = "";
+    } catch {
+      if (mine !== token) return;
+      status.textContent =
+        "No se pudo cargar el modelo 3D. Se muestra la foto.";
+      setMode("foto");
+    }
+  };
+
+  const open = (i: number) => {
+    mode = "3d";
+    show(i);
+    dialog.showModal();
+    document.documentElement.classList.add("viewer-open");
+  };
+
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-open]")
+    .forEach((b) =>
+      b.addEventListener("click", () => open(Number(b.dataset.open))),
+    );
+  modeBtns.forEach((b) =>
+    b.addEventListener("click", () => setMode(b.dataset.mode as "3d" | "foto")),
+  );
+  $("[data-v-prev]").addEventListener("click", () => show(index - 1));
+  $("[data-v-next]").addEventListener("click", () => show(index + 1));
+  $("[data-v-close]").addEventListener("click", () => dialog.close());
+  // Clic en el fondo oscuro cierra
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+  dialog.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") show(index - 1);
+    if (e.key === "ArrowRight") show(index + 1);
+  });
+  dialog.addEventListener("close", async () => {
+    token++;
+    document.documentElement.classList.remove("viewer-open");
+    const { stopViewer } = await import("../scripts/viewer3d");
+    stopViewer();
+  });
+</script>
+
+<style>
+  /* Muro de galería con la paleta negro y oro del sitio */
+  .sala {
+    --wall: var(--ink-2);
+    --wall-ink: var(--bone);
+    --wall-soft: var(--bone-dim);
+    --wall-line: var(--line);
+    --mat: var(--ink-3);
+    --wall-gold: var(--oro);
+    background: var(--wall);
+    color: var(--wall-ink);
+    padding: clamp(4.5rem, 9vw, 7.5rem) 0;
+  }
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--wall-line);
+    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+  }
+  .head h2 {
+    font-size: clamp(2.2rem, 4.6vw, 3.6rem);
+    line-height: 1;
+  }
+  .head p {
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--wall-soft);
+  }
+
+  /* Seis obras en dos filas de anchos alternados (5-4-3 / 3-4-5), alineadas por la base */
+  .wall {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    align-items: end;
+    gap: clamp(2.5rem, 5vw, 4rem) clamp(1rem, 2.6vw, 2.2rem);
+  }
+  .work:nth-child(6n + 1),
+  .work:nth-child(6n + 6) {
+    grid-column: span 5;
+  }
+  .work:nth-child(6n + 2),
+  .work:nth-child(6n + 5) {
+    grid-column: span 4;
+  }
+  .work:nth-child(6n + 3),
+  .work:nth-child(6n + 4) {
+    grid-column: span 3;
+  }
+  .work {
+    display: grid;
+    gap: 0.8rem;
+    min-width: 0;
+  }
+  .frame {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: clamp(0.7rem, 1.6vw, 1.2rem);
+    background: var(--mat);
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+  }
+  .frame img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .frame:hover img {
+    transform: scale(1.02);
+  }
+  .frame:focus-visible {
+    outline: 2px solid var(--wall-gold);
+    outline-offset: 3px;
+  }
+  .badge {
+    position: absolute;
+    right: clamp(1.2rem, 2.4vw, 1.8rem);
+    bottom: clamp(1.2rem, 2.4vw, 1.8rem);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(12, 10, 9, 0.78);
+    color: var(--bone);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    backdrop-filter: blur(6px);
+    transition: background-color 0.2s;
+  }
+  .frame:hover .badge {
+    background: var(--oro);
+    color: var(--ink);
+  }
+  .cartela {
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: var(--wall-soft);
+  }
+  .cartela b {
+    display: block;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--wall-ink);
+  }
+
+  @media (max-width: 900px) {
+    .wall {
+      grid-template-columns: 1fr 1fr;
+    }
+    .work:nth-child(n) {
+      grid-column: auto;
+    }
+  }
+  @media (max-width: 520px) {
+    .wall {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------- Visor ---------- */
+  :global(html.viewer-open) {
+    overflow: hidden;
+  }
+  .viewer {
+    width: min(1100px, calc(100vw - 2rem));
+    height: min(720px, calc(100dvh - 2rem));
+    max-width: none;
+    max-height: none;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--ink);
+    color: var(--bone);
+    overflow: hidden;
+  }
+  .viewer[open] {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+  }
+  .viewer::backdrop {
+    background: rgba(8, 7, 6, 0.82);
+    backdrop-filter: blur(4px);
+  }
+  .v-stage {
+    position: relative;
+    min-height: 0;
+    background: radial-gradient(ellipse at 50% 40%, #2a221b 0%, var(--ink) 70%);
+    overflow: hidden;
+  }
+  .v-photo,
+  .v-3d {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.5s ease;
+  }
+  .v-photo {
+    object-fit: contain;
+  }
+  .v-3d :global(canvas) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+    touch-action: none;
+  }
+  .v-3d :global(canvas:active) {
+    cursor: grabbing;
+  }
+  /* En modo 3D la foto queda de fondo hasta que el modelo está listo */
+  .v-3d {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .viewer[data-mode="3d"].is-3d-ready .v-3d {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .viewer[data-mode="3d"].is-3d-ready .v-photo {
+    opacity: 0;
+  }
+  .v-status,
+  .v-hint {
+    position: absolute;
+    left: 50%;
+    bottom: 1rem;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(12, 10, 9, 0.7);
+    font-size: 0.78rem;
+    color: var(--bone-dim);
+    white-space: nowrap;
+  }
+  .v-status:empty {
+    display: none;
+  }
+  .v-hint {
+    display: none;
+  }
+  .viewer[data-mode="3d"].is-3d-ready .v-hint {
+    display: block;
+  }
+
+  .v-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: clamp(1.4rem, 3vw, 2.2rem);
+    border-left: 1px solid var(--line);
+    overflow-y: auto;
+    min-width: 0;
+  }
+  .v-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .v-count {
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .v-close {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-right: -0.6rem;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--bone);
+    cursor: pointer;
+  }
+  .v-close:hover {
+    background: var(--ink-3);
+  }
+  .v-info h3 {
+    font-size: clamp(2rem, 3.4vw, 2.8rem);
+    font-style: italic;
+  }
+  .v-spec {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.4rem 1.2rem;
+    margin: 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.9rem;
+  }
+  .v-spec dt {
+    color: var(--muted);
+  }
+  .v-spec dd {
+    margin: 0;
+  }
+  .v-text {
+    color: var(--bone-dim);
+    font-size: 0.95rem;
+  }
+  .v-note {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .v-mode {
+    display: inline-flex;
+    align-self: flex-start;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px;
+  }
+  .v-mode[hidden] {
+    display: none;
+  }
+  .v-mode button {
+    min-width: 64px;
+    min-height: 36px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--bone-dim);
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+  .v-mode button[aria-pressed="true"] {
+    background: var(--bone);
+    color: var(--ink);
+  }
+  .v-cta {
+    align-self: flex-start;
+  }
+  .v-nav {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .v-nav button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 44px;
+    border: 0;
+    background: transparent;
+    color: var(--bone-dim);
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  .v-nav button:hover {
+    color: var(--bone);
+  }
+
+  @media (max-width: 760px) {
+    .viewer {
+      width: 100vw;
+      height: 100dvh;
+      border: 0;
+      border-radius: 0;
+    }
+    .viewer[open] {
+      grid-template-columns: 1fr;
+      grid-template-rows: 55% 45%;
+    }
+    .v-info {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+      gap: 0.8rem;
+    }
+  }
+</style>

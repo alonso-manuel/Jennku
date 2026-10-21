@@ -21,16 +21,6 @@ export const site = {
 export const waLink = (text = 'Hola Jennku, quiero cotizar un proyecto.') =>
   `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;
 
-export type Category = 'publicidad' | 'arte' | 'monumental' | 'letras' | 'tematico';
-
-export const categories: { id: Category; label: string }[] = [
-  { id: 'publicidad', label: 'Publicidad' },
-  { id: 'arte', label: 'Arte y bustos' },
-  { id: 'monumental', label: 'Monumental' },
-  { id: 'letras', label: 'Letras y logos' },
-  { id: 'tematico', label: 'Temático' },
-];
-
 export const services = [
   {
     title: 'Dummies y muñecos publicitarios',
@@ -64,27 +54,74 @@ export const services = [
   },
 ];
 
-// FICTICIO: proyectos de ejemplo hasta tener fotos reales.
-// Para usar una foto real, agrega `image: '/proyectos/archivo.jpg'`.
-export const projects: {
+// Obras de la Sala. Foto de estudio en public/obras/ (versión grande y "-sm" para la grilla)
+// y modelo 3D comprimido en public/modelos/. Títulos, medidas, años y textos son provisionales.
+export type Obra = {
+  slug: string; // nombre de los archivos: /obras/<slug>.webp y /modelos/<slug>.glb
   title: string;
-  client: string;
-  category: Category;
-  size: string;
   material: string;
-  image?: string;
-  tall?: boolean;
-  wide?: boolean;
-}[] = [
-  { title: 'Botella gigante para lanzamiento', client: 'Marca de bebidas', category: 'publicidad', size: '3.2 m', material: 'Fibra de vidrio', tall: true },
-  { title: 'Busto en bronce patinado', client: 'Municipalidad', category: 'monumental', size: '0.9 m', material: 'Resina + pátina' },
-  { title: 'Logotipo corpóreo de recepción', client: 'Estudio corporativo', category: 'letras', size: '2.4 m', material: 'Fibra de vidrio', wide: true },
-  { title: 'Dinosaurio para parque infantil', client: 'Parque recreacional', category: 'tematico', size: '5 m', material: 'Fibra de vidrio', wide: true },
-  { title: 'Figura de cómic a escala real', client: 'Colección privada', category: 'arte', size: '1.8 m', material: 'Resina', tall: true },
-  { title: 'Mascota para activación', client: 'Marca de snacks', category: 'publicidad', size: '2.1 m', material: 'Fibra + látex' },
-  { title: 'Imagen religiosa restaurada', client: 'Parroquia', category: 'arte', size: '1.4 m', material: 'Resina', tall: true },
-  { title: 'Monumento conmemorativo', client: 'Gobierno regional', category: 'monumental', size: '4 m', material: 'Fibra de vidrio', tall: true },
-  { title: 'Letras para fachada', client: 'Cadena de restaurantes', category: 'letras', size: '6 m', material: 'Fibra de vidrio' },
+  height: string;
+  year: string;
+  text: string;
+  model?: string; // sin modelo, la obra se abre solo con la foto
+};
+
+// FICTICIO: títulos y datos hasta confirmarlos con el cliente
+export const obras: Obra[] = [
+  {
+    slug: 'figura',
+    title: 'El que señala',
+    material: 'Resina y fibra de vidrio, máscara con pan de oro',
+    height: '1,20 m',
+    year: '2025',
+    text: 'Figura agachada que señala hacia adelante, con una máscara de láminas doradas que le oculta el rostro.',
+    model: '/modelos/figura.glb',
+  },
+  {
+    slug: 'gorilla',
+    title: 'Orangután',
+    material: 'Resina patinada sobre base de madera',
+    height: '0,50 m',
+    year: '2025',
+    text: 'Orangután sentado en reposo. El pelaje está trabajado a mano con textura y pátina rojiza.',
+    model: '/modelos/gorilla.glb',
+  },
+  {
+    slug: 'bronce',
+    title: 'Retrato',
+    material: 'Resina con pátina de bronce',
+    height: '0,40 m',
+    year: '2025',
+    text: 'Retrato de un hombre con el cabello recogido. La pátina imita el bronce fundido.',
+    model: '/modelos/bronce.glb',
+  },
+  {
+    slug: 'anubis',
+    title: 'Anubis',
+    material: 'Resina con acabado de yeso',
+    height: '0,70 m',
+    year: '2024',
+    text: 'Busto del dios egipcio con cabeza de chacal, en un acabado blanco mate.',
+    model: '/modelos/anubis.glb',
+  },
+  {
+    slug: 'baby',
+    title: 'Origen',
+    material: 'Resina con acabado de piedra',
+    height: '0,45 m',
+    year: '2024',
+    text: 'Un bebé sentado y recogido sobre sí mismo, con la superficie manchada como piedra antigua.',
+    model: '/modelos/baby.glb',
+  },
+  {
+    slug: 'hombre',
+    title: 'Grito',
+    material: 'Resina con pátina negra',
+    height: '0,85 m',
+    year: '2024',
+    text: 'Torso de un hombre que grita con el brazo levantado. Estudio de anatomía y tensión.',
+    model: '/modelos/hombre.glb',
+  },
 ];
 
 export const steps = [
