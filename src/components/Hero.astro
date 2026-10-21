@@ -1,12 +1,12 @@
 ---
-import { waLink } from "../data/site";
+import { heroLines, waLink } from "../data/site";
 ---
 
 <section class="hero" id="inicio" data-hero>
   <!-- Brillo y palabra JENNKU: empiezan centrados detrás de la escultura y la siguen a su lugar -->
   <div class="aura" aria-hidden="true" data-aura>
     <div class="glow"></div>
-    <p class="ghost">Jennku</p>
+    <div class="ghost"></div>
   </div>
 
   <div class="container grid">
@@ -15,12 +15,14 @@ import { waLink } from "../data/site";
       <h1>
         <span class="l l1">Damos forma</span>
         <span class="l l2">a lo que</span>{" "}
-        <span class="l l3"><em>imaginas</em>.</span>
+        <span class="l l3"><em data-oil>imaginas</em>.</span>
       </h1>
-      <p class="lead">
-        Esculturas, dummies publicitarios, bustos y letras 3D en fibra de
-        vidrio, resina y látex. Hechas a mano por escultores formados en Bellas
-        Artes, a cualquier escala.
+      <!-- Frases que rotan en bucle (se editan en heroLines, site.ts). Todas ocupan la misma celda,
+           así el bloque toma el alto de la más larga y nada salta al cambiar. -->
+      <p class="lead rotator" data-rotator>
+        {heroLines.map((line, i) => (
+          <span class:list={["line", { "is-on": i === 0 }]}>{line}</span>
+        ))}
       </p>
       <div class="actions">
         <a
@@ -76,7 +78,36 @@ import { waLink } from "../data/site";
   };
 
   if (hero && stage && aura) {
-    const showText = () => hero.classList.add("text-in");
+    // "imaginas" pintada con óleo vivo; si algo falla queda el dorado liso
+    const oil = hero.querySelector<HTMLElement>("[data-oil]");
+    if (oil) {
+      import("../scripts/oilText")
+        .then(({ mountOilText }) => mountOilText(oil))
+        .catch(() => {});
+    }
+
+    // Rotación de frases: empieza cuando terminó de entrar el texto
+    const rotator = hero.querySelector<HTMLElement>("[data-rotator]");
+    let rotating = false;
+    const startRotator = () => {
+      const lines = rotator ? Array.from(rotator.querySelectorAll<HTMLElement>(".line")) : [];
+      if (rotating || lines.length < 2) return;
+      rotating = true;
+      let i = 0;
+      setInterval(() => {
+        if (document.hidden) return;
+        const out = lines[i];
+        i = (i + 1) % lines.length;
+        out.classList.remove("is-on");
+        out.classList.add("is-out");
+        lines[i].classList.remove("is-out");
+        lines[i].classList.add("is-on");
+      }, 4200);
+    };
+    const showText = () => {
+      hero.classList.add("text-in");
+      setTimeout(startRotator, 2600);
+    };
 
     // Lleva el brillo y la palabra al centro del recuadro, más pequeños
     const placeAura = () => {
@@ -168,21 +199,18 @@ import { waLink } from "../data/site";
       rgba(202, 138, 4, 0) 62%
     );
   }
+  /* La palabra es el wordmark del logo, usado como máscara y rellenado en dorado */
   .ghost {
     position: absolute;
     left: 0;
     top: 0;
     transform: translate(-50%, -50%);
-    margin: 0;
-    font-family: var(--font-display);
-    font-weight: 500;
-    font-size: clamp(5rem, 19vw, 20rem);
-    line-height: 1;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(202, 138, 4, 0.5);
+    width: clamp(20rem, 72vw, 72rem);
+    aspect-ratio: 755 / 239;
+    background: var(--oro);
+    opacity: 0.32;
+    -webkit-mask: url("/brand/jennku-wordmark.png") center / contain no-repeat;
+    mask: url("/brand/jennku-wordmark.png") center / contain no-repeat;
   }
   /* Antes de que suba la escultura no se ve nada; al subir aparecen el brillo y la palabra */
   :global(.js) .aura {
@@ -214,7 +242,9 @@ import { waLink } from "../data/site";
     flex: 1;
   }
   h1 {
-    font-size: clamp(3.2rem, 9vw, 7.5rem);
+    font-family: var(--font-hero);
+    font-size: clamp(2.8rem, 7.7vw, 6.45rem);
+    line-height: 1.04;
     margin: 1.4rem 0 1.6rem;
     font-weight: 500;
   }
@@ -222,11 +252,58 @@ import { waLink } from "../data/site";
     font-style: italic;
     color: var(--oro);
   }
+  /* Óleo vivo: el canvas se superpone al texto, que queda transparente pero sigue en el HTML */
+  h1 em[data-oil] {
+    position: relative;
+    display: inline-block;
+  }
+  h1 em.is-painted {
+    color: transparent;
+  }
+  h1 em :global(.oil-canvas) {
+    position: absolute;
+    pointer-events: none;
+  }
   .l {
     display: inline-block;
   }
   .l1 {
     display: block;
+  }
+  /* Frases rotativas: entra desde abajo y sale hacia arriba */
+  .rotator {
+    display: grid;
+  }
+  .line {
+    grid-area: 1 / 1;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(0.7em);
+    filter: blur(4px);
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s var(--ease-out),
+      filter 0.7s ease,
+      visibility 0s linear 0.7s;
+  }
+  .line.is-on {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    filter: none;
+    transition:
+      opacity 0.7s ease 0.15s,
+      transform 0.8s var(--ease-out) 0.15s,
+      filter 0.7s ease 0.15s;
+  }
+  .line.is-out {
+    transform: translateY(-0.7em);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .line {
+      transform: none;
+      filter: none;
+    }
   }
   .actions {
     display: flex;

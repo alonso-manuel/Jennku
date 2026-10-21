@@ -112,3 +112,13 @@ export const testimonials = [
     role: 'Administradora, parque recreacional',
   },
 ];
+
+// Frases del Hero que rotan en bucle, en este orden, debajo del titular
+export const heroLines = [
+  'Esculturas, dummies publicitarios, bustos y letras 3D en fibra de vidrio, resina y látex.',
+  'Hechas a mano por escultores formados en Bellas Artes del Perú.',
+  'De una figura de 20 cm a un monumento de varios metros.',
+  'Mascotas de marca y productos gigantes para tu próxima campaña.',
+  'Bustos y monumentos para plazas, instituciones y municipios.',
+  'Diseñamos, fabricamos y enviamos a todo el Perú.',
+];
