@@ -61,7 +61,7 @@ Todo está centralizado en `src/data/site.ts` y marcado con `// FICTICIO`:
 - [ ] Fotos del taller y del equipo (sección "El taller", hoy con placeholders)
 - [ ] Datos de contacto reales y redes
 - [ ] Testimonios reales (o quitarlos si no hay)
-- [ ] `noindex` mientras viva en el dominio de pruebas (meta robots en `Layout.astro` o `_headers` en Netlify)
+- [x] `noindex` mientras viva en el dominio de pruebas (cabecera en `netlify.toml`; quitarla en el dominio final)
 - [ ] Imagen Open Graph propia (1200×630) para compartir en WhatsApp y redes
 - [ ] Deploy en Netlify y conexión del dominio de Spaceship
 - [ ] La IA le agregó a la figura una cola que no tiene la obra real (cuelga bajo la base): decidir si se recorta

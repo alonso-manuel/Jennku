@@ -1,0 +1,35 @@
+# Configuración de Netlify: se despliega solo desde la rama main de GitHub.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# DEMO EN DOMINIO DE PRUEBAS: que los buscadores no indexen el sitio.
+# Quitar este bloque cuando el sitio pase al dominio final del cliente.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# Modelos 3D, fotos y videos casi no cambian: el navegador puede guardarlos una semana
+[[headers]]
+  for = "/modelos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/obras/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/galeria/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/proceso/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"

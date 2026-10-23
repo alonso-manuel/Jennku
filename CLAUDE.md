@@ -39,4 +39,4 @@ npm run preview    # sirve dist/
 - Comprueba que no haya scroll horizontal a 375 px de ancho.
 
 ## Notas
-- El hosting será Netlify con un dominio de pruebas de Spaceship. Mientras esté en ese dominio, el sitio debe llevar `noindex` (pendiente).
+- Hosting: Netlify, conectado al repositorio de GitHub (se despliega solo con cada push a `main`). Configuración en `netlify.toml`. Mientras esté en el dominio de pruebas de Spaceship lleva `noindex` (cabecera `X-Robots-Tag` en `netlify.toml`); hay que quitarla al pasar al dominio final.
