@@ -224,8 +224,11 @@ import { obras } from "../data/site";
   dialog.addEventListener("close", async () => {
     token++;
     document.documentElement.classList.remove("viewer-open");
-    const { stopViewer } = await import("../scripts/viewer3d");
-    stopViewer();
+    // Si el visor nunca llegó a cargar, no hay nada que detener
+    try {
+      const { stopViewer } = await import("../scripts/viewer3d");
+      stopViewer();
+    } catch {}
   });
 </script>
 
