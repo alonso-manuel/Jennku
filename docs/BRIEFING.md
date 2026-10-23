@@ -40,7 +40,7 @@ No se copia. Sirve como referencia de **qué ofrece el rubro**. La idea es hacer
 ## Estructura de la landing
 1. Hero: titular con entrada animada, CTA a WhatsApp, escultura 3D (las cifras y la marquesina de materiales se quitaron por decisión del equipo)
 2. Sala (`#obras`): muro de galería con las 6 obras del taller (fotos de estudio y cartela). Cada una se abre en grande con su ficha y se puede girar en 3D. Más adelante, con más obras, una página `/galeria`
-3. Servicios (6)
+3. Servicios (5, definidos por el equipo): escultura en fibra, esculturas publicitarias, restauraciones, escultura digital y pedidos personalizados. Mosaico con el primero en casilla grande; "Pedidos personalizados" es la casilla dorada que invita a contar una idea. Cada casilla abre WhatsApp con el servicio escrito. Por ahora todas muestran "Foto pendiente"
 4. Proceso (4 pasos) y materiales
 5. El taller (Bellas Artes) y testimonios
 6. Contacto: formulario → WhatsApp
@@ -54,6 +54,7 @@ Todo está centralizado en `src/data/site.ts` y marcado con `// FICTICIO`:
 - Testimonios (`testimonials`)
 
 ## Pendientes
+- [ ] Fotos para los 4 servicios del mosaico (el personalizado no lleva foto) → `public/servicios/` y `image` en `services`
 - [ ] Confirmar con el cliente títulos y datos de las 6 obras de la Sala
 - [ ] Fotos del taller y del equipo (sección "El taller", hoy con placeholders)
 - [ ] Datos de contacto reales y redes

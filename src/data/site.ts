@@ -21,36 +21,35 @@ export const site = {
 export const waLink = (text = 'Hola Jennku, quiero cotizar un proyecto.') =>
   `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;
 
-export const services = [
+// Servicios: en este orden se arma el mosaico (el primero va en la casilla grande).
+// El que lleva `custom: true` se muestra como la casilla dorada que invita a contar una idea.
+// Para poner una foto, guárdala en public/servicios/ y agrega `image: '/servicios/archivo.webp'`.
+export const services: { title: string; text: string; tags: string[]; image?: string; custom?: boolean }[] = [
   {
-    title: 'Dummies y muñecos publicitarios',
-    text: 'Productos gigantes, mascotas de marca y piezas para activaciones, ferias y lanzamientos.',
+    title: 'Escultura en fibra',
+    text: 'Esculturas, estatuas y bustos en fibra de vidrio y resina: livianos, resistentes y para interior o exterior, a cualquier escala.',
+    tags: ['Arte', 'Bustos', 'Monumentos'],
+  },
+  {
+    title: 'Esculturas publicitarias',
+    text: 'Dummies, productos gigantes, mascotas de marca y letras 3D para campañas, ferias y puntos de venta.',
     tags: ['Campañas', 'Eventos', 'Retail'],
   },
   {
-    title: 'Esculturas y estatuas',
-    text: 'Obra artística a pedido, desde piezas de escritorio hasta figuras de tamaño real.',
-    tags: ['Arte', 'Decoración', 'Colección'],
+    title: 'Restauraciones',
+    text: 'Devolvemos su forma y acabado a esculturas dañadas: grietas, piezas rotas, pintura y pátina.',
+    tags: ['Arte sacro', 'Patrimonio', 'Exterior'],
   },
   {
-    title: 'Bustos y monumentos',
-    text: 'Retratos escultóricos y obra conmemorativa para plazas, instituciones y municipios.',
-    tags: ['Retrato', 'Institucional', 'Exterior'],
+    title: 'Escultura digital',
+    text: 'Modelamos tu pieza en 3D para que la apruebes desde todos los ángulos antes de fabricarla.',
+    tags: ['Modelado 3D', 'Prototipos'],
   },
   {
-    title: 'Letras y logotipos 3D',
-    text: 'Tu marca en volumen, para fachadas, recepciones, stands y escenografías.',
-    tags: ['Branding', 'Fachadas', 'Stands'],
-  },
-  {
-    title: 'Parques temáticos y piscinas',
-    text: 'Personajes, rocas artificiales, toboganes decorativos y ambientación a gran escala.',
-    tags: ['Recreación', 'Gran formato', 'Exterior'],
-  },
-  {
-    title: 'Moldes, réplicas y arte sacro',
-    text: 'Reproducciones fieles, piezas arqueológicas, imaginería religiosa, trofeos y premios.',
-    tags: ['Moldes', 'Series', 'Restauración'],
+    title: 'Pedidos personalizados',
+    text: '¿Tienes una idea que no encaja en ninguna categoría? Cuéntanosla y la hacemos en el material y tamaño que necesites.',
+    tags: ['A medida'],
+    custom: true,
   },
 ];
 

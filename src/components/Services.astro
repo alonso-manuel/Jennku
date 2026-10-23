@@ -1,108 +1,246 @@
 ---
-import { services } from '../data/site';
+import { services, waLink } from '../data/site';
+import Placeholder from './Placeholder.astro';
+
+// Casillas con foto (las que no son `custom`) y la casilla dorada del pedido personalizado
+const tiles = services.filter((s) => !s.custom);
+const custom = services.find((s) => s.custom);
+// Tono del marcador de foto pendiente de cada casilla
+const tones = ['resina', 'warm', 'laca', 'resina'] as const;
 ---
 
-<section class="section" id="servicios">
+<!-- Servicios en mosaico: cada casilla lleva a WhatsApp con el servicio ya escrito.
+     Sin `image`, la casilla muestra el marcador de foto pendiente (máscara del logo). -->
+<section class="section" id="servicios" aria-labelledby="servicios-title">
   <div class="container">
     <div class="head reveal">
-      <div>
-        <p class="eyebrow">Servicios</p>
-        <h2 class="section-title">Del boceto<br /><em>a la pieza terminada.</em></h2>
-      </div>
-      <p class="lead">
-        Hacemos piezas únicas o en serie, para interior o exterior, para marcas, instituciones,
-        artistas y particulares. Si se puede imaginar, se puede esculpir.
-      </p>
+      <p class="eyebrow">Servicios</p>
+      <h2 class="section-title" id="servicios-title">Si se puede imaginar, <em>se puede esculpir.</em></h2>
     </div>
 
-    <ol class="list">
-      {services.map((s, i) => (
-        <li class="item reveal">
-          <span class="num">{String(i + 1).padStart(2, '0')}</span>
-          <h3>{s.title}</h3>
-          <p>{s.text}</p>
-          <ul class="tags">
-            {s.tags.map((t) => <li>{t}</li>)}
-          </ul>
+    <ul class="mosaic">
+      {tiles.map((s, i) => (
+        <li class:list={['tile', 'reveal', { big: i === 0 }]}>
+          <a
+            href={waLink(`Hola Jennku, quiero cotizar: ${s.title.toLowerCase()}.`)}
+            target="_blank"
+            rel="noopener"
+            aria-label={`${s.title}: cotizar por WhatsApp`}
+          >
+            {s.image ? (
+              <img src={s.image} alt="" loading="lazy" />
+            ) : (
+              <Placeholder label={s.title} tone={tones[i % tones.length]} class="pending" />
+            )}
+            <span class="cap">
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+              <span class="go">
+                Cotizar
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+              </span>
+            </span>
+          </a>
         </li>
       ))}
-    </ol>
+      {custom && (
+      <li class="tile wide idea reveal">
+        <a href={waLink('Hola Jennku, tengo una idea para una pieza personalizada y quiero cotizarla.')} target="_blank" rel="noopener">
+          <span class="idea-text">
+            <h3>{custom.title}</h3>
+            <p>{custom.text}</p>
+          </span>
+          <span class="go">
+            Cuéntanos tu idea por WhatsApp
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </span>
+        </a>
+      </li>
+      )}
+    </ul>
   </div>
 </section>
 
 <style>
   .head {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem 4rem;
-    align-items: end;
-    margin-bottom: clamp(3rem, 6vw, 5rem);
+    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
   }
-  .list {
+
+  /* 3 columnas: la primera casilla ocupa 2×2; la dorada, 2×1 al final */
+  .mosaic {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    border-top: 1px solid var(--line);
-    border-left: 1px solid var(--line);
+    grid-auto-rows: clamp(200px, 20vw, 260px);
+    gap: 12px;
   }
-  .item {
-    padding: 2.2rem 2rem 2.4rem;
-    border-right: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    transition: background 0.3s;
+  .tile.big {
+    grid-column: span 2;
+    grid-row: span 2;
   }
-  .item:hover {
-    background: var(--ink-2);
+  .tile.wide {
+    grid-column: span 2;
   }
-  .item:hover .num {
+  .tile a {
+    position: relative;
+    display: block;
+    height: 100%;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--ink-3);
+    color: inherit;
+    text-decoration: none;
+  }
+  .tile a:focus-visible {
+    outline-offset: 3px;
+  }
+  .tile img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .tile a:hover img {
+    transform: scale(1.04);
+  }
+
+  /* Marcador de foto pendiente (Placeholder): llena la casilla, sin su etiqueta */
+  .tile :global(.pending) {
+    position: absolute;
+    inset: 0;
+    min-height: 0;
+  }
+  .tile :global(.pending .ph-label) {
+    display: none;
+  }
+  .tile :global(.pending .ph-mark) {
+    opacity: 0.14;
+    transform: translateY(-12%);
+    transition: opacity 0.4s ease;
+  }
+  .tile a:hover :global(.pending .ph-mark) {
+    opacity: 0.22;
+  }
+
+  .cap {
+    position: absolute;
+    inset: auto 0 0 0;
+    display: grid;
+    gap: 0.3rem;
+    padding: 2.5rem 1.1rem 1rem;
+    background: linear-gradient(transparent, rgba(12, 10, 9, 0.94));
+  }
+  .tile h3 {
+    font-size: clamp(1.35rem, 1.9vw, 1.6rem);
+    line-height: 1.1;
+  }
+  .tile.big h3 {
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+  }
+  .cap p {
+    max-height: 0;
+    overflow: hidden;
+    font-size: 0.85rem;
+    color: var(--bone-dim);
+    transition: max-height 0.35s ease;
+  }
+  .go {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.82rem;
+    font-weight: 600;
     color: var(--oro);
   }
-  .num {
-    font-family: var(--font-display);
-    font-size: 1rem;
-    color: var(--muted);
-    transition: color 0.3s;
+  .cap .go {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
   }
-  h3 {
-    font-size: 1.9rem;
-    margin: 2.5rem 0 0.8rem;
+  .tile a:hover .cap p,
+  .tile a:focus-visible .cap p,
+  .tile.big .cap p {
+    max-height: 4.5em;
   }
-  .item > p {
-    color: var(--bone-dim);
-    font-size: 0.95rem;
+  .tile a:hover .cap .go,
+  .tile a:focus-visible .cap .go,
+  .tile.big .cap .go {
+    max-height: 1.6em;
   }
-  .tags {
-    list-style: none;
-    padding: 0;
-    margin: 1.5rem 0 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
+  .tile a:hover {
+    box-shadow: inset 0 0 0 1px var(--oro);
   }
-  .tags li {
-    font-size: 0.72rem;
-    padding: 0.25rem 0.65rem;
-    border: 1px solid var(--line);
-    border-radius: 99px;
-    color: var(--muted);
+
+  /* Casilla para cotizar una idea propia */
+  .idea a {
+    display: grid;
+    align-content: space-between;
+    padding: 1.3rem 1.4rem;
+    background: var(--oro);
+    color: var(--ink);
+    transition: background-color 0.2s;
+  }
+  .idea a:hover {
+    background: var(--oro-hover);
+    box-shadow: none;
+  }
+  .idea-text {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .idea h3 {
+    font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+  }
+  .idea p {
+    max-width: 42ch;
+    font-size: 0.92rem;
+    color: rgba(12, 10, 9, 0.78);
+  }
+  .idea .go {
+    color: var(--ink);
+  }
+
+  /* Sin cursor (celulares): la descripción y "Cotizar" siempre visibles */
+  @media (hover: none) {
+    .cap p {
+      max-height: 4.5em;
+    }
+    .cap .go {
+      max-height: 1.6em;
+    }
   }
 
   @media (max-width: 900px) {
-    .head {
-      grid-template-columns: 1fr;
-    }
-    .list {
+    .mosaic {
       grid-template-columns: 1fr 1fr;
+      grid-auto-rows: 200px;
+    }
+    /* en 2 columnas la cuarta casilla va a lo ancho para no dejar un hueco */
+    .tile:nth-child(4) {
+      grid-column: span 2;
     }
   }
-  @media (max-width: 600px) {
-    .list {
+  @media (max-width: 560px) {
+    .mosaic {
       grid-template-columns: 1fr;
+      grid-auto-rows: 190px;
     }
-    h3 {
-      margin-top: 1.5rem;
+    .tile.big,
+    .tile.wide,
+    .tile:nth-child(4) {
+      grid-column: auto;
+      grid-row: span 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tile img,
+    .cap p,
+    .cap .go {
+      transition: none;
     }
   }
 </style>
