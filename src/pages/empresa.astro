@@ -1,0 +1,57 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+---
+
+<!-- Página de la empresa: provisional hasta tener la información del equipo -->
+<Layout title={`Empresa · ${site.name}`} description={`Quiénes somos en ${site.name}, taller de escultura en Lima.`}>
+  <Header />
+  <main class="empresa">
+    <section class="container hold">
+      <img src="/brand/busto.webp" alt="" width="378" height="543" class="mark" />
+      <p class="brand">{site.name}</p>
+      <p class="eyebrow">Empresa</p>
+      <p class="msg">Trabajando esta parte hasta que el kabraso pase la data</p>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .empresa {
+    padding-top: 4.5rem; /* alto del header fijo */
+  }
+  .hold {
+    min-height: calc(100svh - 4.5rem);
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 1.2rem;
+    padding-block: 4rem;
+    text-align: center;
+  }
+  .mark {
+    width: clamp(140px, 22vw, 220px);
+    height: auto;
+  }
+  .brand {
+    font-family: var(--font-brand);
+    font-weight: 600;
+    font-size: clamp(1.8rem, 6vw, 3.6rem);
+    line-height: 1;
+    color: var(--bone);
+  }
+  .eyebrow {
+    margin-top: 1rem;
+  }
+  .msg {
+    max-width: 34ch;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+    line-height: 1.25;
+    color: var(--bone-dim);
+  }
+</style>
