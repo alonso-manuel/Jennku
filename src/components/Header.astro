@@ -1,25 +1,28 @@
 ---
 import { waLink } from '../data/site';
 
+// Con "/" delante para que funcionen también desde /galeria
 const links = [
-  { href: '#obras', label: 'Obras' },
-  { href: '#servicios', label: 'Servicios' },
-  { href: '#proceso', label: 'Proceso' },
-  { href: '#taller', label: 'El taller' },
-  { href: '#contacto', label: 'Contacto' },
+  { href: '/#obras', label: 'Obras' },
+  { href: '/galeria', label: 'Galería' },
+  { href: '/#servicios', label: 'Servicios' },
+  { href: '/#proceso', label: 'Proceso' },
+  { href: '/#taller', label: 'El taller' },
+  { href: '/#contacto', label: 'Contacto' },
 ];
+const path = Astro.url.pathname.replace(/\/$/, '');
 ---
 
 <header class="header" data-header>
   <div class="container bar">
-    <a href="#inicio" class="brand" aria-label="Jennku, ir al inicio">
+    <a href="/" class="brand" aria-label="ENFiBRART, ir al inicio">
       <img src="/brand/mascara.png" alt="" width="22" height="30" />
-      <img src="/brand/jennku-wordmark.png" alt="Jennku" width="96" height="30" class="wordmark" />
+      <span class="wordmark">ENFiBRART</span>
     </a>
 
     <nav class="nav" id="menu" aria-label="Principal">
       <ul>
-        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        {links.map((l) => <li><a href={l.href} aria-current={l.href === path ? 'page' : undefined}>{l.label}</a></li>)}
       </ul>
       <a class="btn btn-primary nav-cta" href={waLink()} target="_blank" rel="noopener">Cotizar</a>
     </nav>
@@ -85,6 +88,14 @@ const links = [
     height: 30px;
     width: auto;
   }
+  .wordmark {
+    font-family: var(--font-brand);
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    color: var(--bone);
+  }
   .nav {
     display: flex;
     align-items: center;
@@ -103,7 +114,8 @@ const links = [
     color: var(--bone-dim);
     transition: color 0.2s;
   }
-  .nav ul a:hover {
+  .nav ul a:hover,
+  .nav ul a[aria-current='page'] {
     color: var(--bone);
   }
   /* El botón dentro del menú solo se ve en el menú desplegable del celular */

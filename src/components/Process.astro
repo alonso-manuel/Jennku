@@ -2,22 +2,37 @@
 import { steps } from '../data/site';
 ---
 
-<section class="section" id="proceso">
+<!-- Proceso como recorrido: la obra queda fija a un lado y, al bajar, pasa por cada etapa (digital, arcilla,
+     fibra, terminada) mientras el texto de cada paso entra al otro lado. -->
+<section class="section" id="proceso" aria-labelledby="proceso-title">
   <div class="container">
     <div class="reveal">
       <p class="eyebrow">Proceso</p>
-      <h2 class="section-title">Cuatro pasos,<br /><em>hechos a mano.</em></h2>
+      <h2 class="section-title" id="proceso-title">Así nace <em>cada pieza.</em></h2>
     </div>
 
-    <ol class="steps">
-      {steps.map((s) => (
-        <li class="step reveal">
-          <span class="n">{s.n}</span>
-          <h3>{s.title}</h3>
-          <p>{s.text}</p>
-        </li>
-      ))}
-    </ol>
+    <div class="tour" data-tour>
+      <div class="media" aria-hidden="true">
+        <span class="tag" data-tour-tag>{steps[0].n} · {steps[0].stage}</span>
+        {steps.map((s, i) => (
+          <div class:list={['layer', { grid: i === 0, 'is-on': i === 0 }]} data-layer={i}>
+            <img src={s.image} alt="" width="900" height="1200" loading="lazy" />
+          </div>
+        ))}
+      </div>
+
+      <ol class="steps">
+        {steps.map((s, i) => (
+          <li class:list={['step', { 'is-on': i === 0 }]} data-step={i}>
+            <span class="week">{s.n} · {s.week}</span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+            <img class="step-img" src={s.image} alt="" width="900" height="1200" loading="lazy" />
+          </li>
+        ))}
+      </ol>
+    </div>
+    <p class="note">Etapas ilustradas con el modelo 3D de una obra del taller. Plazos de referencia para una pieza de unos 2 m.</p>
 
     <aside class="materials reveal">
       <div>
@@ -36,44 +51,135 @@ import { steps } from '../data/site';
   </div>
 </section>
 
+<script>
+  // La etapa visible sigue al paso que está en el centro de la pantalla
+  const tour = document.querySelector<HTMLElement>('[data-tour]');
+  if (tour) {
+    const steps = Array.from(tour.querySelectorAll<HTMLElement>('[data-step]'));
+    const layers = Array.from(tour.querySelectorAll<HTMLElement>('[data-layer]'));
+    const tag = tour.querySelector<HTMLElement>('[data-tour-tag]')!;
+    const labels = steps.map((s) => s.querySelector('.week')!.textContent!.split(' · ')[0]);
+    const stages = ['Escultura digital', 'Arcilla', 'Fibra de vidrio', 'Terminada'];
+    const set = (i: number) => {
+      steps.forEach((s, k) => s.classList.toggle('is-on', k === i));
+      layers.forEach((l, k) => l.classList.toggle('is-on', k === i));
+      tag.textContent = `${labels[i]} · ${stages[i] ?? ''}`;
+    };
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && set(Number((e.target as HTMLElement).dataset.step))),
+      { rootMargin: '-45% 0px -45% 0px' }
+    );
+    steps.forEach((s) => io.observe(s));
+  }
+</script>
+
 <style>
+  .tour {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4.5rem);
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  /* Imagen fija mientras se recorren los pasos */
+  .media {
+    position: sticky;
+    top: 6rem;
+    align-self: start;
+    aspect-ratio: 3 / 4;
+    max-height: calc(100vh - 8rem);
+    width: 100%;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: radial-gradient(ellipse at 50% 40%, #2a221b 0%, var(--ink-2) 72%);
+  }
+  .layer {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+  .layer.grid {
+    background:
+      repeating-linear-gradient(0deg, transparent 0 23px, rgba(250, 249, 246, 0.05) 23px 24px),
+      repeating-linear-gradient(90deg, transparent 0 23px, rgba(250, 249, 246, 0.05) 23px 24px);
+  }
+  .layer.is-on {
+    opacity: 1;
+  }
+  .layer img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .tag {
+    position: absolute;
+    left: 1rem;
+    top: 0.9rem;
+    z-index: 2;
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(12, 10, 9, 0.75);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--resina);
+  }
+
+  /* Pasos: cada uno ocupa buena parte de la pantalla para que el recorrido se sienta */
   .steps {
     list-style: none;
-    margin: clamp(3rem, 6vw, 5rem) 0 0;
+    margin: 0;
     padding: 0;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
   }
   .step {
     position: relative;
-    padding-top: 2rem;
-    border-top: 1px solid var(--line);
+    min-height: 62vh;
+    display: grid;
+    align-content: center;
+    gap: 0.6rem;
+    padding-left: 1.8rem;
+    border-left: 1px solid var(--line);
+    opacity: 0.35;
+    transition: opacity 0.5s ease;
   }
   .step::before {
     content: '';
     position: absolute;
-    top: -4px;
-    left: 0;
-    width: 7px;
-    height: 7px;
+    left: -5px;
+    top: 50%;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
+    background: var(--line);
+    transition: background-color 0.4s;
+  }
+  .step.is-on {
+    opacity: 1;
+  }
+  .step.is-on::before {
     background: var(--oro);
   }
-  .n {
-    font-family: var(--font-display);
-    font-size: 4rem;
-    line-height: 1;
-    color: transparent;
-    -webkit-text-stroke: 1px var(--muted);
+  .week {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--oro);
   }
   .step h3 {
-    font-size: 1.7rem;
-    margin: 1rem 0 0.7rem;
+    font-size: clamp(2rem, 3.6vw, 2.9rem);
   }
   .step p {
     color: var(--bone-dim);
-    font-size: 0.95rem;
+    max-width: 40ch;
+  }
+  .step-img {
+    display: none;
+  }
+  .note {
+    margin-top: 1.2rem;
+    font-size: 0.78rem;
+    color: var(--muted);
   }
 
   .materials {
@@ -101,17 +207,43 @@ import { steps } from '../data/site';
     margin-top: 0.5rem;
   }
 
-  @media (max-width: 900px) {
-    .steps {
-      grid-template-columns: 1fr 1fr;
+  /* En celular: sin imagen fija; cada paso lleva su imagen y se lee de corrido */
+  @media (max-width: 860px) {
+    .tour {
+      grid-template-columns: 1fr;
+    }
+    .media {
+      display: none;
+    }
+    .step {
+      min-height: 0;
+      opacity: 1;
+      padding-block: 1.5rem;
+    }
+    .step::before {
+      top: 2.2rem;
+      background: var(--oro);
+    }
+    .step-img {
+      display: block;
+      width: 100%;
+      max-width: 340px;
+      aspect-ratio: 3 / 4;
+      height: auto;
+      object-fit: contain;
+      margin-top: 0.8rem;
+      border-radius: var(--radius);
+      background: radial-gradient(ellipse at 50% 40%, #2a221b 0%, var(--ink-2) 72%);
     }
     .materials {
       grid-template-columns: 1fr;
     }
   }
-  @media (max-width: 560px) {
-    .steps {
-      grid-template-columns: 1fr;
+
+  @media (prefers-reduced-motion: reduce) {
+    .layer,
+    .step {
+      transition: none;
     }
   }
 </style>

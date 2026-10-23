@@ -22,7 +22,7 @@ const tones = ['resina', 'warm', 'laca', 'resina'] as const;
       {tiles.map((s, i) => (
         <li class:list={['tile', 'reveal', { big: i === 0 }]}>
           <a
-            href={waLink(`Hola Jennku, quiero cotizar: ${s.title.toLowerCase()}.`)}
+            href={waLink(`Hola ENFiBRART, quiero cotizar: ${s.title.toLowerCase()}.`)}
             target="_blank"
             rel="noopener"
             aria-label={`${s.title}: cotizar por WhatsApp`}
@@ -45,7 +45,7 @@ const tones = ['resina', 'warm', 'laca', 'resina'] as const;
       ))}
       {custom && (
       <li class="tile wide idea reveal">
-        <a href={waLink('Hola Jennku, tengo una idea para una pieza personalizada y quiero cotizarla.')} target="_blank" rel="noopener">
+        <a href={waLink('Hola ENFiBRART, tengo una idea para una pieza personalizada y quiero cotizarla.')} target="_blank" rel="noopener">
           <span class="idea-text">
             <h3>{custom.title}</h3>
             <p>{custom.text}</p>

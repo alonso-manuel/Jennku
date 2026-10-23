@@ -1,5 +1,5 @@
 // Escena 3D del Hero en un canvas que cubre toda la sección.
-// Coreografía: la escultura sube desde abajo al centro (con JENNKU detrás, en el HTML), hace una pausa,
+// Coreografía: la escultura sube desde abajo al centro (con ENFiBRART detrás, en el HTML), hace una pausa,
 // se desplaza a su lugar (el recuadro [data-sculpture]) y recién entonces entra el texto.
 // Después se mece, sigue al cursor y se puede girar arrastrando.
 import {

@@ -3,10 +3,10 @@ import { heroLines, waLink } from "../data/site";
 ---
 
 <section class="hero" id="inicio" data-hero>
-  <!-- Brillo y palabra JENNKU: empiezan centrados detrás de la escultura y la siguen a su lugar -->
+  <!-- Brillo y nombre ENFiBRART: empiezan centrados detrás de la escultura y la siguen a su lugar -->
   <div class="aura" aria-hidden="true" data-aura>
     <div class="glow"></div>
-    <div class="ghost"></div>
+    <p class="ghost">ENFiBRART</p>
   </div>
 
   <div class="container grid">
@@ -199,18 +199,20 @@ import { heroLines, waLink } from "../data/site";
       rgba(202, 138, 4, 0) 62%
     );
   }
-  /* La palabra es el wordmark del logo, usado como máscara y rellenado en dorado */
+  /* El nombre de la marca en Lexend Zetta, dorado y tenue detrás de la escultura */
   .ghost {
     position: absolute;
     left: 0;
     top: 0;
     transform: translate(-50%, -50%);
-    width: clamp(20rem, 72vw, 72rem);
-    aspect-ratio: 755 / 239;
-    background: var(--oro);
-    opacity: 0.32;
-    -webkit-mask: url("/brand/jennku-wordmark.png") center / contain no-repeat;
-    mask: url("/brand/jennku-wordmark.png") center / contain no-repeat;
+    margin: 0;
+    font-family: var(--font-brand);
+    font-weight: 600;
+    font-size: clamp(2.6rem, 8.2vw, 8.6rem);
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--oro);
+    opacity: 0.3;
   }
   /* Antes de que suba la escultura no se ve nada; al subir aparecen el brillo y la palabra */
   :global(.js) .aura {

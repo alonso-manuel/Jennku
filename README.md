@@ -1,6 +1,6 @@
-# Jennku: landing
+# ENFiBRART: landing
 
-Landing en Astro para Jennku, taller de esculturas en fibra de vidrio, resina y látex en Lima, Perú.
+Landing en Astro para ENFiBRART, taller de esculturas en fibra de vidrio, resina y látex en Lima, Perú.
 
 ```bash
 npm install

@@ -1,14 +1,14 @@
-// Datos del sitio. Todo lo marcado como FICTICIO se reemplaza cuando Jennku entregue la información real.
+// Datos del sitio. Todo lo marcado como FICTICIO se reemplaza cuando ENFiBRART entregue la información real.
 
 export const site = {
-  name: 'Jennku',
+  name: 'ENFiBRART',
   tagline: 'Esculturas en fibra de vidrio, resina y látex',
   description:
     'Taller de escultores formados en Bellas Artes del Perú. Creamos esculturas, bustos, monumentos, dummies publicitarios y letras 3D en fibra de vidrio, resina y látex, a cualquier escala y con envíos a todo el país.',
-  url: 'https://jennku.pe', // FICTICIO
+  url: 'https://enfibrart.pe', // FICTICIO
   whatsapp: '51900000000', // FICTICIO: solo dígitos, con código de país
   phoneDisplay: '+51 900 000 000', // FICTICIO
-  email: 'hola@jennku.pe', // FICTICIO
+  email: 'hola@enfibrart.pe', // FICTICIO
   address: 'Lima, Perú', // FICTICIO
   hours: 'Lun a Sáb · 9:00 a 18:00', // FICTICIO
   social: {
@@ -18,7 +18,7 @@ export const site = {
   },
 };
 
-export const waLink = (text = 'Hola Jennku, quiero cotizar un proyecto.') =>
+export const waLink = (text = 'Hola ENFiBRART, quiero cotizar un proyecto.') =>
   `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;
 
 // Servicios: en este orden se arma el mosaico (el primero va en la casilla grande).
@@ -123,11 +123,14 @@ export const obras: Obra[] = [
   },
 ];
 
+// Proceso (recorrido): la obra de ejemplo pasa por cada etapa. `image` es el modelo 3D de la obra renderizado
+// en el material de esa etapa (public/proceso/); cuando haya fotos reales del proceso, se reemplazan ahí.
+// FICTICIO: plazos de referencia hasta confirmarlos con el taller
 export const steps = [
-  { n: '01', title: 'Idea y boceto', text: 'Nos cuentas lo que necesitas. Dibujamos y modelamos en 3D hasta que la pieza sea exactamente la que imaginas.' },
-  { n: '02', title: 'Modelado y molde', text: 'Esculpimos el original en arcilla, espuma o plastilina y fabricamos el molde para reproducirlo.' },
-  { n: '03', title: 'Laminado', text: 'Laminamos en fibra de vidrio, resina o látex según el uso: interior, exterior, liviano o resistente.' },
-  { n: '04', title: 'Acabado y entrega', text: 'Lijado, pintura automotriz o pátina y barniz de protección. Embalamos y enviamos a todo el Perú.' },
+  { n: '01', week: 'Semana 1', stage: 'Escultura digital', image: '/proceso/etapa-0.webp', title: 'Idea y boceto', text: 'Nos cuentas lo que necesitas. Dibujamos y modelamos en 3D hasta que la pieza sea exactamente la que imaginas.' },
+  { n: '02', week: 'Semanas 2 y 3', stage: 'Arcilla', image: '/proceso/etapa-1.webp', title: 'Modelado y molde', text: 'Esculpimos el original a mano en arcilla, espuma o plastilina y fabricamos el molde para reproducirlo.' },
+  { n: '03', week: 'Semanas 3 y 4', stage: 'Fibra de vidrio', image: '/proceso/etapa-2.webp', title: 'Laminado', text: 'Laminamos en fibra de vidrio, resina o látex según el uso: interior, exterior, liviano o resistente.' },
+  { n: '04', week: 'Semana 5', stage: 'Terminada', image: '/proceso/etapa-3.webp', title: 'Acabado y entrega', text: 'Lijado, pintura automotriz o pátina y barniz de protección. Embalamos y enviamos a todo el Perú.' },
 ];
 
 // FICTICIO
@@ -157,4 +160,37 @@ export const heroLines = [
   'Mascotas de marca y productos gigantes para tu próxima campaña.',
   'Bustos y monumentos para plazas, instituciones y municipios.',
   'Diseñamos, fabricamos y enviamos a todo el Perú.',
+];
+
+// Galería (/galeria): fotos del taller en public/galeria/gNN.webp (grande) y gNN-sm.webp (miniatura).
+// cat: 'retratos' | 'ornamentos' | 'taller'. Los originales están en modelos-originales/trabajo/.
+export type GaleriaCat = 'retratos' | 'ornamentos' | 'taller';
+export const galeriaCats: { id: GaleriaCat; label: string }[] = [
+  { id: 'retratos', label: 'Retratos y bustos' },
+  { id: 'ornamentos', label: 'Ornamentos' },
+  { id: 'taller', label: 'En el taller' },
+];
+export const galeria: { src: string; w: number; h: number; alt: string; cat: GaleriaCat }[] = [
+  { src: 'g01', w: 1280, h: 1600, cat: 'retratos', alt: 'Busto de mujer con corona de flores bajo luz violeta' },
+  { src: 'g02', w: 1200, h: 1600, cat: 'ornamentos', alt: 'Ornamento barroco en arcilla con flores y volutas' },
+  { src: 'g03', w: 960, h: 1280, cat: 'retratos', alt: 'Busto de anciano con barba larga, modelado en arcilla' },
+  { src: 'g04', w: 1463, h: 1000, cat: 'taller', alt: 'Manos afinando con una herramienta el rostro de un busto de arcilla' },
+  { src: 'g05', w: 1204, h: 1600, cat: 'retratos', alt: 'Busto de un joven en arcilla sobre su base' },
+  { src: 'g06', w: 1200, h: 1600, cat: 'ornamentos', alt: 'Mascarón ornamental con rostro y volutas, en arcilla' },
+  { src: 'g07', w: 1008, h: 1426, cat: 'retratos', alt: 'Busto de hombre con barba en arcilla roja, en una exposición' },
+  { src: 'g08', w: 951, h: 1264, cat: 'retratos', alt: 'Busto de hombre en yeso' },
+  { src: 'g09', w: 899, h: 1599, cat: 'retratos', alt: 'Busto de mujer con corona de flores, en arcilla' },
+  { src: 'g10', w: 1200, h: 1600, cat: 'ornamentos', alt: 'Mascarón con un rostro entre flores, modelado en arcilla' },
+  { src: 'g11', w: 861, h: 1280, cat: 'taller', alt: 'Cabeza en arcilla a medio modelar, con la armadura a la vista' },
+  { src: 'g12', w: 799, h: 1014, cat: 'retratos', alt: 'Detalle del rostro del busto de un joven en arcilla' },
+  { src: 'g13', w: 1600, h: 900, cat: 'ornamentos', alt: 'Relieve de un águila con las alas abiertas, en arcilla' },
+  { src: 'g14', w: 922, h: 1444, cat: 'retratos', alt: 'Busto de mujer con cabello ondulado, en arcilla' },
+  { src: 'g15', w: 1280, h: 1600, cat: 'retratos', alt: 'Busto de mujer bajo luz de colores' },
+  { src: 'g16', w: 1280, h: 1599, cat: 'retratos', alt: 'Detalle del rostro de la mujer con corona de flores' },
+  { src: 'g17', w: 1280, h: 861, cat: 'taller', alt: 'Un integrante del taller junto a una cabeza de arcilla' },
+  { src: 'g18', w: 899, h: 1599, cat: 'retratos', alt: 'Rostro en relieve modelado en arcilla' },
+  { src: 'g19', w: 1203, h: 1600, cat: 'retratos', alt: 'Detalle del rostro del busto en yeso' },
+  { src: 'g20', w: 1280, h: 857, cat: 'taller', alt: 'Cabeza masculina en arcilla, de perfil, en el taller' },
+  { src: 'g21', w: 725, h: 1181, cat: 'retratos', alt: 'Perfil del busto de un joven en arcilla' },
+  { src: 'g22', w: 1600, h: 900, cat: 'taller', alt: 'Piezas ornamentales de yeso en el taller' },
 ];

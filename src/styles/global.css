@@ -14,6 +14,7 @@
   --font-display: 'Cormorant', 'Times New Roman', serif;
   --font-body: 'Manrope', system-ui, sans-serif;
   --font-hero: 'Playfair Display', 'Times New Roman', serif; /* titular del Hero */
+  --font-brand: 'Lexend Zetta', 'Arial', sans-serif; /* nombre de la marca: ENFiBRART en SemiBold */
 
   --gutter: clamp(1rem, 4vw, 3rem);
   --max: 1240px;

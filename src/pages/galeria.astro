@@ -1,0 +1,476 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { galeria, galeriaCats, site, waLink } from '../data/site';
+
+const videos = [
+  { src: '/galeria/video-arcilla.mp4', poster: '/galeria/video-arcilla.webp', w: 480, h: 848, label: 'En arcilla, en el taller' },
+  { src: '/galeria/video-terminado.mp4', poster: '/galeria/video-terminado.webp', w: 640, h: 960, label: 'Terminado' },
+];
+---
+
+<Layout
+  title={`Galería · ${site.name}, taller de escultura en Lima`}
+  description="Fotos y videos del taller: retratos, bustos y ornamentos modelados a mano en arcilla, del barro a la pieza terminada."
+>
+  <Header />
+  <main class="galeria">
+    <section class="intro container">
+      <p class="eyebrow">Galería</p>
+      <h1 class="section-title">Del barro <em>a la obra.</em></h1>
+      <p class="lead">
+        Retratos, bustos y ornamentos modelados a mano en el taller. Antes de la fibra y la resina, cada
+        pieza nace así: en arcilla.
+      </p>
+    </section>
+
+    <!-- Un mismo retrato, en arcilla y terminado -->
+    <section class="videos container" aria-labelledby="videos-title">
+      <div class="videos-head reveal">
+        <h2 id="videos-title">Un mismo retrato, <em>dos momentos.</em></h2>
+        <p>El busto se modela en arcilla en el taller y después se convierte en la pieza que se expone.</p>
+      </div>
+      <div class="video-pair">
+        {videos.map((v) => (
+          <figure class="video reveal">
+            <div class="frame" style={`aspect-ratio: ${v.w} / ${v.h}`}>
+              <video
+                data-video
+                src={v.src}
+                poster={v.poster}
+                width={v.w}
+                height={v.h}
+                muted
+                loop
+                playsinline
+                preload="none"
+                aria-label={`Video: ${v.label}`}
+              ></video>
+              <button class="vbtn" type="button" data-vbtn aria-label="Reproducir video">
+                <svg class="i-play" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+                <svg class="i-pause" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" /></svg>
+              </button>
+            </div>
+            <figcaption>{v.label}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
+
+    <section class="fotos container" aria-labelledby="fotos-title">
+      <div class="fotos-head">
+        <h2 id="fotos-title">Fotos del taller</h2>
+        <div class="filters" role="group" aria-label="Filtrar fotos">
+          <button type="button" class="chip" data-filter="all" aria-pressed="true">Todo</button>
+          {galeriaCats.map((c) => (
+            <button type="button" class="chip" data-filter={c.id} aria-pressed="false">{c.label}</button>
+          ))}
+        </div>
+      </div>
+
+      <ul class="masonry">
+        {galeria.map((g, i) => (
+          <li class="item" data-cat={g.cat}>
+            <button type="button" class="shot" data-shot={i} aria-label={`Ver en grande: ${g.alt}`}>
+              <img
+                src={`/galeria/${g.src}-sm.webp`}
+                srcset={`/galeria/${g.src}-sm.webp ${Math.round(g.w * Math.min(700 / g.w, 1000 / g.h, 1))}w, /galeria/${g.src}.webp ${g.w}w`}
+                sizes="(max-width: 600px) 92vw, (max-width: 1000px) 46vw, 31vw"
+                alt={g.alt}
+                width={g.w}
+                height={g.h}
+                loading={i < 6 ? 'eager' : 'lazy'}
+              />
+            </button>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="cierre container reveal">
+      <h2>¿Tienes una pieza en mente?</h2>
+      <a class="btn btn-primary" href={waLink('Hola ENFiBRART, vi la galería en su web y quiero cotizar una pieza.')} target="_blank" rel="noopener">
+        Cotiza por WhatsApp
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+      </a>
+    </section>
+  </main>
+  <Footer />
+
+  <dialog class="lightbox" data-lightbox aria-label="Foto en grande">
+    <img data-lb-img alt="" />
+    <p class="lb-cap" data-lb-cap></p>
+    <button type="button" class="lb-btn lb-close" data-lb-close aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+    </button>
+    <button type="button" class="lb-btn lb-prev" data-lb-prev aria-label="Foto anterior">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M15 6l-6 6 6 6" /></svg>
+    </button>
+    <button type="button" class="lb-btn lb-next" data-lb-next aria-label="Foto siguiente">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 6l6 6-6 6" /></svg>
+    </button>
+  </dialog>
+</Layout>
+
+<script>
+  import { galeria } from '../data/site';
+
+  // ---------- Videos: se reproducen solos (sin sonido) mientras se ven; botón para pausar ----------
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll<HTMLVideoElement>('[data-video]').forEach((video) => {
+    const btn = video.parentElement!.querySelector<HTMLButtonElement>('[data-vbtn]')!;
+    let userPaused = reduced; // con movimiento reducido no arrancan solos
+    const sync = () => {
+      const playing = !video.paused;
+      btn.classList.toggle('is-playing', playing);
+      btn.setAttribute('aria-label', playing ? 'Pausar video' : 'Reproducir video');
+    };
+    video.addEventListener('play', sync);
+    video.addEventListener('pause', sync);
+    btn.addEventListener('click', () => {
+      if (video.paused) {
+        userPaused = false;
+        video.play().catch(() => {});
+      } else {
+        userPaused = true;
+        video.pause();
+      }
+    });
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !userPaused) video.play().catch(() => {});
+      if (!e.isIntersecting) video.pause();
+    }, { threshold: 0.4 }).observe(video);
+  });
+
+  // ---------- Filtros ----------
+  const items = Array.from(document.querySelectorAll<HTMLElement>('.masonry .item'));
+  const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+  chips.forEach((chip) =>
+    chip.addEventListener('click', () => {
+      const f = chip.dataset.filter;
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+      items.forEach((it) => (it.hidden = f !== 'all' && it.dataset.cat !== f));
+    })
+  );
+
+  // ---------- Foto en grande ----------
+  const lb = document.querySelector<HTMLDialogElement>('[data-lightbox]')!;
+  const img = lb.querySelector<HTMLImageElement>('[data-lb-img]')!;
+  const cap = lb.querySelector<HTMLElement>('[data-lb-cap]')!;
+  let current = 0;
+  const visible = () => items.filter((it) => !it.hidden).map((it) => Number(it.querySelector<HTMLElement>('[data-shot]')!.dataset.shot));
+  const show = (i: number) => {
+    current = i;
+    const g = galeria[i];
+    img.src = `/galeria/${g.src}.webp`;
+    img.alt = g.alt;
+    cap.textContent = g.alt;
+  };
+  const step = (d: number) => {
+    const list = visible();
+    const pos = list.indexOf(current);
+    show(list[(pos + d + list.length) % list.length]);
+  };
+  document.querySelectorAll<HTMLButtonElement>('[data-shot]').forEach((b) =>
+    b.addEventListener('click', () => {
+      show(Number(b.dataset.shot));
+      lb.showModal();
+      document.documentElement.classList.add('lb-open');
+    })
+  );
+  lb.querySelector('[data-lb-close]')!.addEventListener('click', () => lb.close());
+  lb.querySelector('[data-lb-prev]')!.addEventListener('click', () => step(-1));
+  lb.querySelector('[data-lb-next]')!.addEventListener('click', () => step(1));
+  lb.addEventListener('click', (e) => {
+    if (e.target === lb) lb.close();
+  });
+  lb.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight') step(1);
+  });
+  lb.addEventListener('close', () => document.documentElement.classList.remove('lb-open'));
+</script>
+
+<style>
+  .galeria {
+    padding-top: 4.5rem; /* alto del header fijo */
+  }
+  .intro {
+    padding-block: clamp(3.5rem, 8vw, 6rem) clamp(2.5rem, 5vw, 3.5rem);
+  }
+  .intro h1 {
+    font-size: clamp(2.8rem, 7vw, 5.6rem);
+    margin-top: 1rem;
+  }
+  .intro .lead {
+    margin-top: 1.4rem;
+  }
+
+  /* ---------- Videos ---------- */
+  .videos {
+    padding-block: clamp(2rem, 5vw, 3.5rem) clamp(4rem, 8vw, 6rem);
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+  }
+  .videos-head h2 {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+  }
+  .videos-head h2 em {
+    color: var(--bone-dim);
+  }
+  .videos-head p {
+    margin-top: 1rem;
+    color: var(--bone-dim);
+    max-width: 38ch;
+  }
+  .video-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(0.8rem, 2vw, 1.4rem);
+    align-items: end;
+  }
+  .video {
+    margin: 0;
+    display: grid;
+    gap: 0.7rem;
+  }
+  .video:nth-child(2) {
+    transform: translateY(clamp(1.5rem, 4vw, 3rem));
+  }
+  .video .frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--ink-3);
+  }
+  .video video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .video figcaption {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .vbtn {
+    position: absolute;
+    right: 0.8rem;
+    bottom: 0.8rem;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(12, 10, 9, 0.7);
+    color: var(--bone);
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: background-color 0.2s, color 0.2s;
+  }
+  .vbtn:hover {
+    background: var(--oro);
+    color: var(--ink);
+  }
+  .vbtn .i-pause,
+  .vbtn.is-playing .i-play {
+    display: none;
+  }
+  .vbtn.is-playing .i-pause {
+    display: block;
+  }
+
+  /* ---------- Fotos ---------- */
+  .fotos {
+    padding-block: clamp(3rem, 6vw, 5rem);
+    border-top: 1px solid var(--line);
+  }
+  .fotos-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.2rem 2rem;
+    margin-bottom: clamp(1.8rem, 4vw, 2.5rem);
+  }
+  .fotos-head h2 {
+    font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .chip {
+    font: inherit;
+    font-size: 0.85rem;
+    min-height: 40px;
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--bone-dim);
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .chip:hover {
+    border-color: var(--bone-dim);
+    color: var(--bone);
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--bone);
+    border-color: var(--bone);
+    color: var(--ink);
+  }
+  .masonry {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    columns: 3;
+    column-gap: 14px;
+  }
+  .item {
+    break-inside: avoid;
+    margin-bottom: 14px;
+  }
+  .item[hidden] {
+    display: none;
+  }
+  .shot {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--ink-3);
+    cursor: zoom-in;
+  }
+  .shot img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.3s;
+  }
+  .shot:hover img {
+    transform: scale(1.03);
+  }
+  .shot:focus-visible {
+    outline-offset: 3px;
+  }
+
+  .cierre {
+    padding-block: clamp(3rem, 7vw, 5rem) clamp(4rem, 9vw, 7rem);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .cierre h2 {
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+  }
+
+  /* ---------- Foto en grande ---------- */
+  :global(html.lb-open) {
+    overflow: hidden;
+  }
+  .lightbox {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgba(8, 7, 6, 0.96);
+    color: var(--bone);
+  }
+  .lightbox[open] {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    place-items: center;
+    padding: 3.5rem 4.5rem 1.2rem;
+  }
+  .lightbox img {
+    max-width: 100%;
+    max-height: calc(100dvh - 7rem);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--radius);
+  }
+  .lb-cap {
+    font-size: 0.88rem;
+    color: var(--bone-dim);
+    text-align: center;
+    padding-top: 0.8rem;
+  }
+  .lb-btn {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(32, 28, 25, 0.8);
+    color: var(--bone);
+    cursor: pointer;
+  }
+  .lb-btn:hover {
+    background: var(--oro);
+    color: var(--ink);
+  }
+  .lb-close {
+    top: 0.8rem;
+    right: 0.8rem;
+  }
+  .lb-prev,
+  .lb-next {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .lb-prev {
+    left: 0.8rem;
+  }
+  .lb-next {
+    right: 0.8rem;
+  }
+
+  @media (max-width: 1000px) {
+    .masonry {
+      columns: 2;
+    }
+  }
+  @media (max-width: 860px) {
+    .videos {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 600px) {
+    .masonry {
+      columns: 1;
+    }
+    .lightbox[open] {
+      padding: 3.5rem 0.6rem 1rem;
+    }
+    .lb-prev,
+    .lb-next {
+      top: auto;
+      bottom: 0.8rem;
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .shot img {
+      transition: none;
+    }
+  }
+</style>

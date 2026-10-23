@@ -1,7 +1,7 @@
-# Briefing: landing de Jennku
+# Briefing: landing de ENFiBRART
 
 ## Cliente
-- **Nombre:** Jennku
+- **Nombre:** ENFiBRART (antes Jennku; el equipo cambió el nombre en octubre de 2026). Se escribe con la *i* minúscula y en Lexend Zetta SemiBold.
 - **Rubro:** esculturas en fibra de vidrio, resina y látex, a pedido y a cualquier escala.
 - **Equipo:** estudiantes de **Bellas Artes del Perú** (ENSABAP). Es su diferencial frente a la competencia: formación académica en anatomía, proporción y modelado. Más adelante se puede ampliar en una sección propia o en una página "Nosotros".
 - **Ubicación:** Lima, Perú. Hacen envíos a todo el país.
@@ -12,7 +12,7 @@
 
 No se copia. Sirve como referencia de **qué ofrece el rubro**. La idea es hacerlo bastante mejor.
 
-### Qué ofrecen (y Jennku también)
+### Qué ofrecen (y ENFiBRART también)
 - Materiales: fibra de vidrio, resina, látex
 - Productos: esculturas, estatuas, bustos, monumentos, dummies y muñecos publicitarios, logotipos y letras 3D, carteles, réplicas, arte sacro, trofeos y premios, personajes de cómic, elementos para parques temáticos, piscinas y toboganes, moldes y reproducciones arqueológicas
 - Mercados: artístico, publicitario, comercial y decorativo
@@ -32,7 +32,7 @@ No se copia. Sirve como referencia de **qué ofrece el rubro**. La idea es hacer
 - **Dirección visual:** galería o taller de arte con fondo oscuro cálido, para que resalten los colores de las piezas.
   - Colores (negro y oro, elegida en la comparación de paletas): tinta `#0c0a09`, hueso `#faf9f6`, oro `#ca8a04` (acento y botón principal, con texto oscuro: contraste 6,7), resina `#e0b75a` (detalle). Reemplaza a la paleta anterior con rojo laca `#c8452c`, cuyo botón no llegaba al contraste mínimo.
   - Tipografía: Cormorant (títulos, serif clásica a juego con el wordmark) y Manrope (texto)
-- **3D:** el Hero sigue la propuesta "Fundición" (ver los cinco rediseños). La figura con máscara dorada sube al centro con JENNKU en contorno dorado detrás, hace una pausa y se desplaza a la derecha (JENNKU y el brillo la acompañan, más pequeños) y entra el texto. Luego se mece, sigue al cursor y se puede girar arrastrando. (Se probó sumar el busto y la máscara saliendo a los costados; se descartó.) Con `prefers-reduced-motion` la coreografía se mantiene (es el contenido del Hero; el equipo pidió que se vea en todos los equipos), el vaivén posterior es más lento y el texto entra con recorridos cortos. Si el 3D falla, se muestra `figura.webp`.
+- **3D:** el Hero sigue la propuesta "Fundición" (ver los cinco rediseños). La figura con máscara dorada sube al centro con ENFiBRART en dorado detrás, hace una pausa y se desplaza a la derecha (ENFiBRART y el brillo la acompañan, más pequeños) y entra el texto. Luego se mece, sigue al cursor y se puede girar arrastrando. (Se probó sumar el busto y la máscara saliendo a los costados; se descartó.) Con `prefers-reduced-motion` la coreografía se mantiene (es el contenido del Hero; el equipo pidió que se vea en todos los equipos), el vaivén posterior es más lento y el texto entra con recorridos cortos. Si el 3D falla, se muestra `figura.webp`.
 - **Titular del Hero:** Playfair Display (elegida entre ocho fuentes). La palabra *imaginas* se rellena con "óleo vivo": pinceladas en ocre, carmín, ultramar, verde y oro que se pintan sin parar. Debajo, seis frases que rotan en bucle (`heroLines`).
 - **Header:** logo a la izquierda, menú centrado y "Cotizar" con borde a la derecha.
 - **Conversión:** WhatsApp es el canal principal (botón flotante, CTAs, formulario que arma el mensaje y abre WhatsApp). No hay backend.
@@ -41,10 +41,12 @@ No se copia. Sirve como referencia de **qué ofrece el rubro**. La idea es hacer
 1. Hero: titular con entrada animada, CTA a WhatsApp, escultura 3D (las cifras y la marquesina de materiales se quitaron por decisión del equipo)
 2. Sala (`#obras`): muro de galería con las 6 obras del taller (fotos de estudio y cartela). Cada una se abre en grande con su ficha y se puede girar en 3D. Más adelante, con más obras, una página `/galeria`
 3. Servicios (5, definidos por el equipo): escultura en fibra, esculturas publicitarias, restauraciones, escultura digital y pedidos personalizados. Mosaico con el primero en casilla grande; "Pedidos personalizados" es la casilla dorada que invita a contar una idea. Cada casilla abre WhatsApp con el servicio escrito. Por ahora todas muestran "Foto pendiente"
-4. Proceso (4 pasos) y materiales
+4. Proceso como recorrido (propuesta F): la obra *El que señala* queda fija y, al bajar, pasa por cada etapa (modelo digital, arcilla, fibra, terminada) junto al texto de cada paso. Las etapas son renders del modelo 3D en cada material (`public/proceso/`); se reemplazan por fotos reales del proceso cuando las haya. En celular, cada paso lleva su imagen. Debajo, los tres materiales
 5. El taller (Bellas Artes) y testimonios
 6. Contacto: formulario → WhatsApp
 7. Footer y botón flotante de WhatsApp
+
+Página aparte **/galeria** (enlazada desde el menú y desde la Sala): dos videos del mismo retrato (en arcilla en el taller y terminado) y 22 fotos elegidas de las 41 que mandó el equipo, con filtros (retratos y bustos, ornamentos, en el taller) y vista en grande. Se descartaron moldes lisos, fotos repetidas y recortes muy oscuros.
 
 ## Datos ficticios (reemplazar cuando el cliente los entregue)
 Todo está centralizado en `src/data/site.ts` y marcado con `// FICTICIO`:

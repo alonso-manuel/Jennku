@@ -55,6 +55,11 @@ import { obras } from "../data/site";
         ))
       }
     </ul>
+
+    <a class="to-galeria reveal" href="/galeria">
+      Ver la galería del taller
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+    </a>
   </div>
 </section>
 
@@ -167,7 +172,7 @@ import { obras } from "../data/site";
     $("[data-v-year]").textContent = o.year;
     $("[data-v-text]").textContent = o.text;
     $<HTMLAnchorElement>("[data-v-cta]").href = waLink(
-      `Hola Jennku, vi la obra «${o.title}» en su web y quiero cotizar una pieza parecida.`,
+      `Hola ENFiBRART, vi la obra «${o.title}» en su web y quiero cotizar una pieza parecida.`,
     );
     photo.src = `/obras/${o.slug}.webp`;
     photo.alt = `${o.title}, ${o.material.toLowerCase()}`;
@@ -287,6 +292,22 @@ import { obras } from "../data/site";
   .work:nth-child(6n + 3),
   .work:nth-child(6n + 4) {
     grid-column: span 3;
+  }
+  .to-galeria {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--oro);
+    color: var(--wall-ink);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s, gap 0.2s;
+  }
+  .to-galeria:hover {
+    color: var(--oro);
+    gap: 0.8rem;
   }
   .work {
     display: grid;

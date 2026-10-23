@@ -31,3 +31,6 @@ modelos-originales/
 
 # caché de Python
 __pycache__/
+
+# fotos y videos originales que llegan sin procesar (las versiones web van en public/galeria)
+public/trabajo/
