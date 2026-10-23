@@ -62,7 +62,8 @@ Todo está centralizado en `src/data/site.ts` y marcado con `// FICTICIO`:
 - [ ] Datos de contacto reales y redes
 - [ ] Testimonios reales (o quitarlos si no hay)
 - [x] `noindex` mientras viva en el dominio de pruebas (cabecera en `netlify.toml`; quitarla en el dominio final)
-- [ ] Imagen Open Graph propia (1200×630) para compartir en WhatsApp y redes
+- [ ] Logo vectorial de ENFiBRART (busto, nombre con la A de tres rayas): reemplazar `busto.*`, favicon y `og.jpg`, hoy hechos desde una captura de baja resolución
+- [x] Imagen para compartir (1200×630, `og.jpg`): provisional, con el busto
 - [ ] Deploy en Netlify y conexión del dominio de Spaceship
 - [ ] La IA le agregó a la figura una cola que no tiene la obra real (cuelga bajo la base): decidir si se recorta
 - [ ] El escaneo del busto tiene reflejos claros en la mejilla y la oreja; si se repite, usar luz más difusa

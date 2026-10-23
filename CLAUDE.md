@@ -26,7 +26,7 @@ npm run preview    # sirve dist/
 - `tools/modelos/`: scripts para optimizar modelos (escaneos de KIRI Engine y modelos de Tripo). Los originales van en `modelos-originales/` (fuera de `public/`).
 - `src/styles/global.css`: tokens de diseño (`:root`), utilidades (`.container`, `.section`, `.eyebrow`, `.section-title`, `.lead`, `.btn`).
 - Marca: **ENFiBRART** (así, con la *i* minúscula), siempre en Lexend Zetta SemiBold (`--font-brand`) y como texto, no imagen. Reemplazó al nombre anterior, Jennku.
-- `public/brand/`: `mascara.png` (el ícono de la máscara, usado en el header y en los marcadores de foto pendiente). `jennku-wordmark.png` es el logo del nombre anterior y ya no se usa.
+- `public/brand/`: `busto.png` / `busto.webp`, el ícono del logo de ENFiBRART (busto, color hueso sobre fondo transparente). Se usa en el header, en los marcadores de foto pendiente y como logo en los datos para Google. `public/favicon.png`, `apple-touch-icon.png` y `og.jpg` (imagen al compartir el enlace) salen del mismo busto. Están hechos a partir de una captura de 185 px: reemplazarlos por el vectorial cuando llegue.
 
 ## Convenciones
 - Todo el texto visible va en **español de Perú**, con tuteo y sin mayúsculas gritadas ni "!!".

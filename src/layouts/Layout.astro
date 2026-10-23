@@ -22,7 +22,8 @@ const jsonLd = {
   url: site.url,
   telephone: site.phoneDisplay,
   email: site.email,
-  image: new URL('/brand/mascara.png', site.url).href,
+  image: new URL('/og.jpg', site.url).href,
+  logo: new URL('/brand/busto.png', site.url).href,
   address: { '@type': 'PostalAddress', addressLocality: 'Lima', addressCountry: 'PE' },
   areaServed: 'PE',
 };
@@ -36,7 +37,10 @@ const jsonLd = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <!-- "?v=2" obliga al navegador a descartar el favicon anterior guardado en caché; súbelo si cambia el ícono -->
+    <link rel="icon" href="/favicon.ico?v=2" sizes="48x48" />
+    <link rel="icon" type="image/png" href="/favicon.png?v=2" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2" />
     <meta name="theme-color" content="#0c0a09" />
 
     <meta property="og:type" content="website" />
@@ -44,7 +48,9 @@ const jsonLd = {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={new URL('/brand/mascara.png', site.url).href} />
+    <meta property="og:image" content={new URL('/og.jpg', site.url).href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
