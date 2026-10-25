@@ -1,9 +1,9 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import Placeholder from '../components/Placeholder.astro';
-import { empresa, site, waLink } from '../data/site';
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Placeholder from "../components/Placeholder.astro";
+import { empresa, site, waLink } from "../data/site";
 ---
 
 <!-- Página Empresa, diseño Manifiesto: frase grande con foto del taller, tres valores y el equipo y un cierre con dos caminos: cotizar o ver la galería.
@@ -14,7 +14,10 @@ import { empresa, site, waLink } from '../data/site';
     <section class="container hero">
       <div class="copy">
         <p class="eyebrow">Empresa</p>
-        <h1 class="section-title">{empresa.title} <em>{empresa.titleEm}</em></h1>
+        <h1 class="section-title">
+          {empresa.title}
+          <em>{empresa.titleEm}</em>
+        </h1>
         <p class="lead">{empresa.intro}</p>
       </div>
       <!-- Foto horizontal en su formato original: rostro, herramienta y mano del escultor quedan a la vista -->
@@ -31,51 +34,65 @@ import { empresa, site, waLink } from '../data/site';
     </section>
 
     <section class="container values" aria-label="Cómo trabajamos">
-      {empresa.values.map((v) => (
-        <div class="value reveal">
-          <h2>{v.title}</h2>
-          <p>{v.text}</p>
-        </div>
-      ))}
-    </section>
-
-    <section class="container team-sec" aria-labelledby="equipo-title">
-      <p class="eyebrow" id="equipo-title">El equipo</p>
-      <ul class="team">
-        {empresa.team.map((m) => (
-          <li class="member reveal">
-            <div class="portrait">
-              {m.image ? <img src={m.image} alt={`Retrato de ${m.name}`} loading="lazy" /> : <Placeholder label="Retrato" tone="resina" />}
-            </div>
-            <h3>{m.name}</h3>
-            <p>{m.role}</p>
-          </li>
-        ))}
-      </ul>
-      <p class="note">Nombres y cargos de ejemplo</p>
+      {
+        empresa.values.map((v) => (
+          <div class="value reveal">
+            <h2>{v.title}</h2>
+            <p>{v.text}</p>
+          </div>
+        ))
+      }
     </section>
 
     <!-- Cierre: dos caminos, cotizar o ver más trabajo -->
     <section class="container next" aria-label="Siguiente paso">
-      <a class="card quote reveal" href={waLink('Hola ENFiBRART, vi su página y quiero cotizar una pieza.')} target="_blank" rel="noopener">
+      <a
+        class="card quote reveal"
+        href={waLink(
+          "Hola ENFiBRART, vi su página y quiero cotizar una pieza.",
+        )}
+        target="_blank"
+        rel="noopener"
+      >
         <span class="kicker">¿Tienes una pieza en mente?</span>
         <span class="big">Cotiza por WhatsApp</span>
         <span class="go">
           Cuéntanos tu idea
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg
+          >
         </span>
       </a>
       <a class="card gallery reveal" href="/galeria">
-        <img src="/galeria/g02-sm.webp" alt="" width="700" height="933" loading="lazy" />
+        <img
+          src="/galeria/g02-sm.webp"
+          alt=""
+          width="700"
+          height="933"
+          loading="lazy"
+        />
         <span class="kicker">Mira nuestro trabajo</span>
         <span class="big">Galería del taller</span>
         <span class="go">
           Fotos y videos
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg
+          >
         </span>
       </a>
     </section>
-
   </main>
   <Footer />
 </Layout>
@@ -172,7 +189,6 @@ import { empresa, site, waLink } from '../data/site';
     color: var(--muted);
   }
 
-
   .next {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -237,11 +253,15 @@ import { empresa, site, waLink } from '../data/site';
     transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
   .gallery::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(to top, rgba(12, 10, 9, 0.95) 15%, rgba(12, 10, 9, 0.35));
+    background: linear-gradient(
+      to top,
+      rgba(12, 10, 9, 0.95) 15%,
+      rgba(12, 10, 9, 0.35)
+    );
   }
   .gallery:hover img {
     transform: scale(1.04);
