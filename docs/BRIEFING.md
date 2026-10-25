@@ -57,6 +57,7 @@ Todo está centralizado en `src/data/site.ts` y marcado con `// FICTICIO`:
 
 ## Pendientes
 - [ ] Fotos para los 4 servicios del mosaico (el personalizado no lleva foto) → `public/servicios/` y `image` en `services`
+- [ ] Datos de la página Empresa: frase, presentación, valores, equipo (nombre, especialidad, retrato)
 - [ ] Confirmar con el cliente títulos y datos de las 6 obras de la Sala
 - [ ] Fotos del taller y del equipo (sección "El taller", hoy con placeholders)
 - [ ] Datos de contacto reales y redes

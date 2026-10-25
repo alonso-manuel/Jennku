@@ -194,3 +194,24 @@ export const galeria: { src: string; w: number; h: number; alt: string; cat: Gal
   { src: 'g21', w: 725, h: 1181, cat: 'retratos', alt: 'Perfil del busto de un joven en arcilla' },
   { src: 'g22', w: 1600, h: 900, cat: 'taller', alt: 'Piezas ornamentales de yeso en el taller' },
 ];
+
+// Página /empresa (diseño Manifiesto).
+// FICTICIO: textos, valores y equipo de ejemplo hasta tener la información del cliente.
+// Para un integrante con foto, guárdala en public/equipo/ y agrega `image: '/equipo/archivo.webp'`.
+export const empresa = {
+  title: 'Escultores de formación,',
+  titleEm: 'fabricantes por oficio.',
+  intro:
+    'ENFiBRART es un estudio de diseño y producción escultórica formado por artistas de Bellas Artes del Perú. Unimos la técnica académica del modelado con la fabricación en fibra de vidrio, resina y látex.',
+  values: [
+    { title: 'Mirada de artista', text: 'Anatomía, proporción y composición en cada pieza, sea un busto o una botella gigante.' },
+    { title: 'Oficio de taller', text: 'Modelamos, moldeamos, laminamos y pintamos a mano, de principio a fin.' },
+    { title: 'Palabra cumplida', text: 'Plazos claros y fotos en cada etapa para que apruebes antes de seguir.' },
+  ],
+  team: [
+    { name: 'Nombre Apellido', role: 'Escultor · Dirección' },
+    { name: 'Nombre Apellido', role: 'Escultora · Modelado' },
+    { name: 'Nombre Apellido', role: 'Moldes y laminado' },
+    { name: 'Nombre Apellido', role: 'Acabados y pátinas' },
+  ] as { name: string; role: string; image?: string }[],
+};
