@@ -6,7 +6,7 @@ import { heroLines, waLink } from "../data/site";
   <!-- Brillo y nombre ENFiBRART: empiezan centrados detrás de la escultura y la siguen a su lugar -->
   <div class="aura" aria-hidden="true" data-aura>
     <div class="glow"></div>
-    <p class="ghost">ENFiBRART</p>
+    <div class="ghost"></div>
   </div>
 
   <div class="container grid">
@@ -199,20 +199,18 @@ import { heroLines, waLink } from "../data/site";
       rgba(202, 138, 4, 0) 62%
     );
   }
-  /* El nombre de la marca en Lexend Zetta, dorado y tenue detrás de la escultura */
+  /* La marca vectorial (marca.svg) como máscara, rellena en dorado tenue detrás de la escultura */
   .ghost {
     position: absolute;
     left: 0;
     top: 0;
     transform: translate(-50%, -50%);
-    margin: 0;
-    font-family: var(--font-brand);
-    font-weight: 600;
-    font-size: clamp(2.6rem, 8.2vw, 8.6rem);
-    line-height: 1;
-    white-space: nowrap;
-    color: var(--oro);
-    opacity: 0.3;
+    width: clamp(18rem, 66vw, 64rem);
+    aspect-ratio: 510.6 / 84.7;
+    background: var(--oro);
+    opacity: 0.32;
+    -webkit-mask: url('/brand/marca.svg') center / contain no-repeat;
+    mask: url('/brand/marca.svg') center / contain no-repeat;
   }
   /* Antes de que suba la escultura no se ve nada; al subir aparecen el brillo y la palabra */
   :global(.js) .aura {

@@ -42,7 +42,7 @@ No se copia. Sirve como referencia de **qué ofrece el rubro**. La idea es hacer
 2. Sala (`#obras`): muro de galería con las 6 obras del taller (fotos de estudio y cartela). Cada una se abre en grande con su ficha y se puede girar en 3D. Más adelante, con más obras, una página `/galeria`
 3. Servicios (5, definidos por el equipo): escultura en fibra, esculturas publicitarias, restauraciones, escultura digital y pedidos personalizados. Mosaico con el primero en casilla grande; "Pedidos personalizados" es la casilla dorada que invita a contar una idea. Cada casilla abre WhatsApp con el servicio escrito. Por ahora todas muestran "Foto pendiente"
 4. Proceso como recorrido (propuesta F): la obra *El que señala* queda fija y, al bajar, pasa por cada etapa (modelo digital, arcilla, fibra, terminada) junto al texto de cada paso. Las etapas son renders del modelo 3D en cada material (`public/proceso/`); se reemplazan por fotos reales del proceso cuando las haya. En celular, cada paso lleva su imagen. Debajo, los tres materiales
-5. El taller (Bellas Artes) y testimonios
+5. El taller (Bellas Artes). Los testimonios se quitaron por decisión del equipo
 6. Contacto: formulario → WhatsApp
 7. Footer y botón flotante de WhatsApp
 
@@ -53,7 +53,6 @@ Todo está centralizado en `src/data/site.ts` y marcado con `// FICTICIO`:
 - WhatsApp, teléfono, correo, dirección, horario, redes sociales
 - URL final del sitio (`site.url`, también en `astro.config.mjs`)
 - Títulos, materiales, medidas, años y textos de las obras de la Sala (`obras`)
-- Testimonios (`testimonials`)
 
 ## Pendientes
 - [ ] Fotos para los 4 servicios del mosaico (el personalizado no lleva foto) → `public/servicios/` y `image` en `services`
@@ -61,9 +60,8 @@ Todo está centralizado en `src/data/site.ts` y marcado con `// FICTICIO`:
 - [ ] Confirmar con el cliente títulos y datos de las 6 obras de la Sala
 - [ ] Fotos del taller y del equipo (sección "El taller", hoy con placeholders)
 - [ ] Datos de contacto reales y redes
-- [ ] Testimonios reales (o quitarlos si no hay)
 - [x] `noindex` mientras viva en el dominio de pruebas (cabecera en `netlify.toml`; quitarla en el dominio final)
-- [ ] Logo vectorial de ENFiBRART (busto, nombre con la A de tres rayas): reemplazar `busto.*`, favicon y `og.jpg`, hoy hechos desde una captura de baja resolución
+- [x] Logo vectorial: busto y nombre sacados del PDF del diseñador (`public/brand/*.svg`)
 - [x] Imagen para compartir (1200×630, `og.jpg`): provisional, con el busto
 - [ ] Deploy en Netlify y conexión del dominio de Spaceship
 - [ ] La IA le agregó a la figura una cola que no tiene la obra real (cuelga bajo la base): decidir si se recorta

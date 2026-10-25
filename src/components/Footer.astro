@@ -6,7 +6,7 @@ const year = new Date().getFullYear();
 <footer class="footer">
   <div class="container">
     <div class="top">
-      <p class="wordmark">ENFiBRART</p>
+      <img src="/brand/marca.svg" alt="ENFIBRART" width="560" height="93" class="wordmark" loading="lazy" />
       <a class="btn btn-primary" href={waLink()} target="_blank" rel="noopener">Empecemos tu proyecto</a>
     </div>
     <div class="bottom">
@@ -39,13 +39,8 @@ const year = new Date().getFullYear();
     gap: 2rem;
   }
   .wordmark {
-    margin: 0;
-    font-family: var(--font-brand);
-    font-weight: 600;
-    font-size: clamp(1.6rem, 5.4vw, 3.6rem);
-    line-height: 1;
-    letter-spacing: 0.01em;
-    color: var(--bone);
+    width: min(100%, 560px);
+    height: auto;
   }
   .bottom {
     margin-top: 3.5rem;

@@ -14,10 +14,10 @@ npm run preview    # sirve dist/
 ```
 
 ## Estructura
-- `src/data/site.ts`: **todo el contenido editable** (contacto, frases del Hero, servicios, obras de la Sala, pasos, testimonios). Los datos marcados `// FICTICIO` son de relleno.
+- `src/data/site.ts`: **todo el contenido editable** (contacto, frases del Hero, servicios, obras de la Sala, pasos, galería, empresa). Los datos marcados `// FICTICIO` son de relleno.
 - `src/layouts/Layout.astro`: `<head>` (SEO, Open Graph, JSON-LD LocalBusiness, fuentes) y el script de animación `.reveal`.
 - `src/pages/galeria.astro` (`/galeria`): galería del taller con dos videos (el mismo retrato en arcilla y terminado) y fotos con filtros y vista en grande. Fotos y videos en `public/galeria/`; la lista de fotos es `galeria` en `site.ts`. Los originales están en `modelos-originales/trabajo/`.
-- `src/pages/empresa.astro` (`/empresa`): diseño Manifiesto (frase, foto del taller, tres valores y equipo). Textos y equipo en `empresa` (`site.ts`), de ejemplo hasta tener los datos; retratos en `public/equipo/`.
+- `src/pages/empresa.astro` (`/empresa`): foto alta (`public/empresa/rostro.webp`) con el texto en un bloque oscuro al lado, tres valores y un cierre con cotizar y galería. Textos en `empresa` (`site.ts`), de ejemplo hasta tener los datos.
 - `src/components/`: una sección por archivo (Header, Hero, Services, Sala, Process, About, Contact, Footer). Los enlaces del menú llevan `/` delante (`/#obras`) para funcionar también desde `/galeria` y `Placeholder.astro` para imágenes pendientes.
 - `src/scripts/hero3d.ts`: escena 3D del Hero (Three.js) en un canvas que cubre toda la sección. Coreografía: la figura (`figura.glb`) sube al centro con el nombre ENFiBRART detrás, hace una pausa, se desplaza a su recuadro (`[data-sculpture]`) y recién ahí entra el texto (clase `.text-in`). Los tiempos están en la constante `T`. Si falla, el Hero muestra `figura.webp` y el texto entra de inmediato.
 - `src/scripts/oilText.ts`: "óleo vivo" de la palabra *imaginas* del Hero: un canvas superpuesto pinta pinceladas en bucle recortadas con la forma del texto (el texto sigue en el HTML, transparente). Si falla, queda el dorado liso.
@@ -26,8 +26,8 @@ npm run preview    # sirve dist/
 - `src/scripts/model3d.ts` y `src/scripts/mask3d.ts`: versiones anteriores del Hero (una sola pieza). No se usan; se conservan para poder volver.
 - `tools/modelos/`: scripts para optimizar modelos (escaneos de KIRI Engine y modelos de Tripo). Los originales van en `modelos-originales/` (fuera de `public/`).
 - `src/styles/global.css`: tokens de diseño (`:root`), utilidades (`.container`, `.section`, `.eyebrow`, `.section-title`, `.lead`, `.btn`).
-- Marca: **ENFiBRART** (así, con la *i* minúscula), siempre en Lexend Zetta SemiBold (`--font-brand`) y como texto, no imagen. Reemplazó al nombre anterior, Jennku.
-- `public/brand/`: `busto.png` / `busto.webp`, el ícono del logo de ENFiBRART (busto, color hueso sobre fondo transparente). Se usa en el header, en los marcadores de foto pendiente y como logo en los datos para Google. `public/favicon.png`, `apple-touch-icon.png` y `og.jpg` (imagen al compartir el enlace) salen del mismo busto. Están hechos a partir de una captura de 185 px: reemplazarlos por el vectorial cuando llegue.
+- Marca: logo vectorial entregado por el diseñador (`docs` del cliente: `ENFIBRART.pdf`). `public/brand/marca.svg` es el nombre (con la A de las tres líneas) y `busto.svg` el ícono; se usan como imagen en el header, el pie y el fondo del Hero (como máscara dorada). En el logo se escribe ENFIBRART, todo en mayúsculas. Reemplazó al nombre anterior, Jennku.
+- `public/brand/`: `busto.svg` y `marca.svg` (vectoriales, sacados del PDF del logo con `tools/logo/extraer-logo.py`); `busto.png` / `busto.webp` son versiones raster para usos que no aceptan SVG. `public/favicon.*`, `apple-touch-icon.png` y `og.jpg` se generan desde esos SVG.
 
 ## Convenciones
 - Todo el texto visible va en **español de Perú**, con tuteo y sin mayúsculas gritadas ni "!!".

@@ -133,24 +133,6 @@ export const steps = [
   { n: '04', week: 'Semana 5', stage: 'Terminada', image: '/proceso/etapa-3.webp', title: 'Acabado y entrega', text: 'Lijado, pintura automotriz o pátina y barniz de protección. Embalamos y enviamos a todo el Perú.' },
 ];
 
-// FICTICIO
-export const testimonials = [
-  {
-    quote: 'Necesitábamos un producto gigante para un lanzamiento en dos semanas y llegó impecable. Fue lo más fotografiado del evento.',
-    name: 'Carla M.',
-    role: 'Jefa de marketing, marca de consumo masivo',
-  },
-  {
-    quote: 'El busto quedó con un parecido increíble. Se nota la formación artística del equipo en cada detalle.',
-    name: 'Jorge R.',
-    role: 'Gerente municipal',
-  },
-  {
-    quote: 'Nos asesoraron en materiales para exterior y después de un año la pieza sigue como nueva.',
-    name: 'Lucía P.',
-    role: 'Administradora, parque recreacional',
-  },
-];
 
 // Frases del Hero que rotan en bucle, en este orden, debajo del titular
 export const heroLines = [
@@ -166,9 +148,9 @@ export const heroLines = [
 // cat: 'retratos' | 'ornamentos' | 'taller'. Los originales están en modelos-originales/trabajo/.
 export type GaleriaCat = 'retratos' | 'ornamentos' | 'taller';
 export const galeriaCats: { id: GaleriaCat; label: string }[] = [
-  { id: 'retratos', label: 'Retratos y bustos' },
-  { id: 'ornamentos', label: 'Ornamentos' },
-  { id: 'taller', label: 'En el taller' },
+  { id: 'retratos', label: 'Esculturas' },
+  { id: 'ornamentos', label: 'Restauraciones' },
+  { id: 'taller', label: 'Taller' },
 ];
 export const galeria: { src: string; w: number; h: number; alt: string; cat: GaleriaCat }[] = [
   { src: 'g01', w: 1280, h: 1600, cat: 'retratos', alt: 'Busto de mujer con corona de flores bajo luz violeta' },

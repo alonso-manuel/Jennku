@@ -6,31 +6,42 @@ import Placeholder from "../components/Placeholder.astro";
 import { empresa, site, waLink } from "../data/site";
 ---
 
-<!-- Página Empresa, diseño Manifiesto: frase grande con foto del taller, tres valores y el equipo y un cierre con dos caminos: cotizar o ver la galería.
+<!-- Página Empresa, diseño Manifiesto: foto alta con el texto en un bloque oscuro al lado, tres valores y un cierre con dos caminos: cotizar o ver la galería.
      Textos y equipo en `empresa` (site.ts). -->
 <Layout title={`Empresa · ${site.name}`} description={empresa.intro}>
   <Header />
   <main class="empresa">
+    <!-- Foto a la izquierda que se funde con el fondo (bordes desvanecidos) y el texto encima del fondo, sin caja -->
     <section class="container hero">
+      <!-- Segunda foto, a la derecha y de fondo: tenue y desvanecida hacia el texto -->
+      <img
+        class="backdrop"
+        src="/empresa/flores.webp"
+        srcset="/empresa/flores-sm.webp 700w, /empresa/flores.webp 1280w"
+        sizes="34vw"
+        alt=""
+        width="1280"
+        height="1600"
+        loading="lazy"
+        aria-hidden="true"
+      />
+      <figure class="photo">
+        <img
+          src="/empresa/rostro.webp"
+          srcset="/empresa/rostro-sm.webp 700w, /empresa/rostro.webp 1280w"
+          sizes="(max-width: 900px) 92vw, 36vw"
+          alt="Rostro de una escultura de mujer iluminado con luz violeta"
+          width="1280"
+          height="1599"
+        />
+      </figure>
       <div class="copy">
         <p class="eyebrow">Empresa</p>
         <h1 class="section-title">
-          {empresa.title}
-          <em>{empresa.titleEm}</em>
+          {empresa.title}{" "}<em>{empresa.titleEm}</em>
         </h1>
         <p class="lead">{empresa.intro}</p>
       </div>
-      <!-- Foto horizontal en su formato original: rostro, herramienta y mano del escultor quedan a la vista -->
-      <figure class="photo">
-        <img
-          src="/galeria/g04.webp"
-          srcset="/galeria/g04-sm.webp 700w, /galeria/g04.webp 1463w"
-          sizes="(max-width: 900px) 92vw, 50vw"
-          alt="Un escultor del taller afina con una herramienta el rostro de un busto de arcilla"
-          width="1463"
-          height="1000"
-        />
-      </figure>
     </section>
 
     <section class="container values" aria-label="Cómo trabajamos">
@@ -103,30 +114,68 @@ import { empresa, site, waLink } from "../data/site";
   }
 
   .hero {
+    position: relative;
     display: grid;
-    grid-template-columns: 1fr 1.05fr;
-    gap: clamp(2rem, 5vw, 4.5rem);
+    grid-template-columns: minmax(0, 0.62fr) minmax(0, 1fr);
     align-items: center;
-    padding-block: clamp(3.5rem, 8vw, 6.5rem) clamp(3rem, 6vw, 5rem);
+    padding-block: clamp(2rem, 5vw, 4rem) clamp(3rem, 6vw, 5rem);
   }
-  .hero h1 {
-    font-size: clamp(2.6rem, 5.6vw, 4.8rem);
-    margin-top: 1rem;
-  }
-  .hero .lead {
-    margin-top: 1.4rem;
-  }
+  /* La foto no tiene borde: se desvanece hacia el fondo por los cuatro lados, más por la derecha, donde entra el texto */
   .photo {
     margin: 0;
-    border-radius: var(--radius);
-    overflow: hidden;
-    aspect-ratio: 1463 / 1000;
-    background: var(--ink-3);
+    aspect-ratio: 2 / 3;
+    -webkit-mask-image:
+      linear-gradient(to right, transparent 0%, #000 16%, #000 45%, transparent 98%),
+      linear-gradient(to bottom, transparent 0%, #000 14%, #000 82%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to right, transparent 0%, #000 16%, #000 45%, transparent 98%),
+      linear-gradient(to bottom, transparent 0%, #000 14%, #000 82%, transparent 100%);
+    mask-composite: intersect;
   }
   .photo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+  .backdrop {
+    position: absolute;
+    right: var(--gutter);
+    top: 50%;
+    z-index: 0;
+    width: 34%;
+    height: auto;
+    aspect-ratio: 1280 / 1600;
+    transform: translateY(-50%);
+    object-fit: cover;
+    opacity: 0.55;
+    pointer-events: none;
+    -webkit-mask-image:
+      linear-gradient(to left, transparent 0%, #000 18%, #000 40%, transparent 100%),
+      linear-gradient(to bottom, transparent 0%, #000 16%, #000 80%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to left, transparent 0%, #000 18%, #000 40%, transparent 100%),
+      linear-gradient(to bottom, transparent 0%, #000 16%, #000 80%, transparent 100%);
+    mask-composite: intersect;
+  }
+  .photo {
+    position: relative;
+    z-index: 1;
+  }
+  /* El texto se monta un poco sobre la parte oscura de la foto */
+  .copy {
+    position: relative;
+    z-index: 1;
+    margin-left: clamp(-6rem, -6vw, -2rem);
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 4.8vw, 4.4rem);
+    margin-top: 1rem;
+  }
+  .hero .lead {
+    margin-top: 1.4rem;
+    max-width: 46ch;
   }
 
   .values {
@@ -274,6 +323,20 @@ import { empresa, site, waLink } from "../data/site";
   @media (max-width: 900px) {
     .hero {
       grid-template-columns: 1fr;
+    }
+    .backdrop {
+      display: none;
+    }
+    .photo {
+      aspect-ratio: 4 / 3;
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 55%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 55%, transparent 100%);
+    }
+    .photo img {
+      object-position: 30% 40%;
+    }
+    .copy {
+      margin: -3rem 0 0;
     }
     .values {
       grid-template-columns: 1fr;
