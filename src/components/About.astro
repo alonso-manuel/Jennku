@@ -1,13 +1,28 @@
 ---
-import Placeholder from './Placeholder.astro';
 ---
 
 <section class="section about" id="taller">
   <div class="container">
     <div class="grid">
       <div class="photos reveal">
-        <Placeholder label="El taller" tone="warm" class="p1" />
-        <Placeholder label="Equipo trabajando" tone="laca" class="p2" />
+        <img
+          class="p1"
+          src="/galeria/g04-sm.webp"
+          srcset="/galeria/g04-sm.webp 700w, /galeria/g04.webp 1463w"
+          sizes="(max-width: 900px) 80vw, 40vw"
+          alt="Un escultor del taller afina con una herramienta el rostro de un busto de arcilla"
+          width="1463"
+          height="1000"
+          loading="lazy"
+        />
+        <img
+          class="p2"
+          src="/empresa/autor.webp"
+          alt="Un integrante del taller modela una pieza de arcilla"
+          width="631"
+          height="631"
+          loading="lazy"
+        />
       </div>
 
       <div class="copy reveal">
@@ -40,25 +55,30 @@ import Placeholder from './Placeholder.astro';
     gap: clamp(2.5rem, 6vw, 6rem);
     align-items: center;
   }
+  /* Foto del taller (horizontal) arriba a la izquierda y la del autor (cuadrada) encima, abajo a la derecha */
   .photos {
     position: relative;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1 / 1.04;
   }
-  .photos :global(.p1) {
+  .photos img {
     position: absolute;
-    inset: 0 18% 18% 0;
-    width: auto;
-    height: auto;
+    height: auto; /* que mande el aspect-ratio, no el alto de la etiqueta */
+    object-fit: cover;
     border-radius: var(--radius);
   }
-  .photos :global(.p2) {
-    position: absolute;
-    inset: 45% 0 0 40%;
-    width: auto;
-    height: auto;
-    min-height: 0;
-    border-radius: var(--radius);
+  .p1 {
+    top: 0;
+    left: 0;
+    width: 84%;
+    aspect-ratio: 1463 / 1000;
+  }
+  .p2 {
+    right: 0;
+    bottom: 0;
+    width: 58%;
+    aspect-ratio: 1;
     border: 6px solid var(--ink-2);
+    box-sizing: content-box;
   }
   .lead {
     margin-top: 1.5rem;
